@@ -15,37 +15,12 @@ export class VideoCallComponent implements OnInit {
     api: any;
     constructor() {}
     ngOnInit(): void {
-        this.initVideoCall();
-    }
-    initVideoCall() {
-        let roomInfo;
-        try {
-            roomInfo = JSON.parse(localStorage.getItem('roomInfo'));
-        } catch (error) {
-            console.log(error);
-        }
-        const options = {
-            roomName: roomInfo['roomId'] ? roomInfo['roomId'] : 'vnptit3',
-            width: '100%',
-            height: 590,
-            jwt: roomInfo['token'],
-            configOverwrite: { subject: ' ' }, // set roomName
-            userInfo: {
-                displayName: roomInfo['caller'],
-                email: VideoCallSDK.getUUID(),
-            },
-            parentNode: document.querySelector('#meet'),
-        };
-        this.api = new JitsiMeetExternalAPI(
-            roomInfo['domain'].replace('https://', ''),
-            options
+        VideoCallSDK.initConfig('call', ConfigVideoCall);
+        VideoCallSDK.initVideoCall(
+            JitsiMeetExternalAPI,
+            localStorage.getItem('uuidAdmin').replace(/"/g, ''),
+            '100%',
+            590
         );
-        console.log(options);
-        this.api.addEventListener('readyToClose', async () => {
-            try {
-                VideoCallSDK.endCall(uuidAdmin, ConfigVideoCall);
-                window.open('', '_self').close();
-            } catch (error) {}
-        });
     }
 }

@@ -34,7 +34,7 @@
             crossorigin="anonymous"
         ></script>
         <script src="https://meet.jit.si/external_api.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script> -->
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
             integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
@@ -44,7 +44,7 @@
     <body>
         <script type="text/javascript" src="VideoCall.js"></script>
         <script type="text/javascript" src="device-uuid.js"></script>
-        <script type="text/javascript" src="style-caller.scss"></script>
+        <link rel="stylesheet" href="style-caller.css"></link>
         <div>
             <link
                 href="https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,600,600i,700,700i&display=swap"
@@ -54,7 +54,7 @@
                 href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
                 rel="stylesheet"
             />
-            <span class="ml-2">Video call sample (version 2.0.7)</span>
+            <span class="ml-2">Video call sample (version 2.0.8)</span>
             <div class="spacer"></div>
             <button
                 class="btn btn-success d-inline-flex mr-2"
@@ -144,6 +144,13 @@
                     >
                         Get file
                     </button>
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        onclick="initRatingModal()"
+                    >
+                        Rating modal
+                    </button>
                     <iframe
                         class="home__hero__video"
                         id="urlVideo"
@@ -170,63 +177,27 @@
                 : VideoCallSDK.createUUID();
 
             const ConfigVideoCall = {
-                token_id: '6af3add6-4023-4185-abfe-17b6aaa16b0f',
+                token_id: 'be40e688-6d85-58c8-e053-6c1b9f0a4bdf',
                 token_key:
-                    'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJA5XkrWo36Y/WLmRD1z79TEKxcDzR/A25o9fqydnxJcvv2lWQLjOuyJaFhyP13TwDWOaRE61VSgZgKKfEuQP5kCAwEAAQ==',
-                client_id: 'videocall',
-                client_secret: 'password',
+                    'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI4qY0j034A+rE3JGPKacrQWuPkN1xUiPqzzT4cgKo5ijAlPO5kowDa1N0aQvqf8POyAZwvrdAQBJOzO9E+NLwsCAwEAAQ==',
+                client_id: 'd2yHubLupMr2aTksJosFY3c5WtaF4xbaf8QDlD2U',
+                client_secret: 'HN44EAm8JJOVdK8Je1cLZdgSqnEJsjYYa0ZDkSX9',
             };
-            let client;
+
+            // let client;
             document.getElementById('uuidAdmin').value = uuidAdmin;
             document.getElementById('uuidUser').value = uuidUser;
             document.getElementById('uuidUserText').innerHTML = uuidUser;
 
-            // thực hiện gọi hàm connect khi vừa vào trang dùng để thực hiện video call
-            _connect();
+            //init config cho sdk
+            VideoCallSDK.initConfig("call.html", ConfigVideoCall)
 
-            //hàm connect socket
-            function _connect() {
-                var ws = new WebSocket(
-                    'wss://api.idg.vnpt.vn/router-service/websocket'
-                );
-                client = Stomp.over(ws);
-                client.connect(
-                    {},
-                    function (frame) {
-                        client.subscribe(
-                            '/topic/' +
-                                VideoCallSDK.getTopicUsing(
-                                    uuidAdmin,
-                                    ConfigVideoCall
-                                ),
-                            function (sdkEvent) {
-                                onMessageReceived(sdkEvent);
-                            }
-                        );
-                    },
-                    (e) => {
-                        errorCallBack(e);
-                    }
-                );
-            }
-
-            //disconnect socket khi rời khởi trang dùng để gọi
-            function _disconnect() {
-                if (client !== null) {
-                    client.disconnect();
-                }
-                console.log('Disconnected');
-            }
-
-            //request lại socket khi expired
-            function errorCallBack(error) {
-                console.log('errorCallBack -> ' + error);
-                _connect();
-            }
-
+            // thực hiện connect tới socket
+            VideoCallSDK.initSocket(Stomp, uuidAdmin);
+            
             //hàm thực hiện xóa device khi logout
             function logout() {
-                VideoCallSDK.removeDevice(uuidAdmin, ConfigVideoCall);
+                VideoCallSDK.removeDevice(uuidAdmin);
             }
 
             function createUUID() {
@@ -264,46 +235,28 @@
                 const res = await VideoCallSDK.createCall(
                     uuidAdmin,
                     'admin',
-                    receiverCallers,
-                    ConfigVideoCall
+                    receiverCallers
                 );
                 console.log('call', res);
             }
 
-            //xử lý message khi socket bắn về
-            function onMessageReceived(message) {
-                const mess = JSON.parse(message.body);
-                handleMessage(JSON.stringify(message.body));
-            }
-
+            //get url file record
             async function getFile() {
                 const url = document.getElementById('urlVideo');
-                const res = await VideoCallSDK.getFile(null, ConfigVideoCall);
+                const res = await VideoCallSDK.getFile(null);
                 if (res.object) {
                     url.src = res.object.url;
                 }
                 console.log('getFile', res);
             }
 
-            function handleMessage(message) {
-                const mess = JSON.parse(message);
-                console.log('message', JSON.parse(mess));
-                VideoCallSDK.handleReceivingMessage(
-                    uuidAdmin,
-                    JSON.parse(mess),
-                    ConfigVideoCall
-                );
-            }
-
             function loginAs(role) {
                 alert('login as ' + role);
-                console.log(VideoCallSDK.getUUID());
                 if (role === 'admin') {
                     VideoCallSDK.registerDevice(
-                        uuidAdmin, // token
                         uuidAdmin,
-                        ConfigVideoCall,
-                        'admin'
+                        uuidAdmin,
+                        'Những Văn Hẳn'
                     );
                 }
             }

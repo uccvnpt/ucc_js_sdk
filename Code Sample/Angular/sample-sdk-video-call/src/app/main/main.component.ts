@@ -1,47 +1,47 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { WebSocketAPI } from '../WebSocketAPI';
+import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { ConfigVideoCall } from '../ConfigVideoCall';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import * as StompJS from 'stompjs';
 
 declare function VideoCall(): any;
-const VideoCallSDK = VideoCall();
 
 @Component({
     selector: 'app-main',
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.css'],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
+    VideoCallSDK = VideoCall();
+    stompClient: any;
+    subscription;
     message;
-    webSocketAPI: WebSocketAPI;
     name: string;
     urlVideo: SafeResourceUrl;
 
     uuidAdmin: string = localStorage.getItem('uuidAdmin')
         ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
-        : VideoCallSDK.createUUID();
+        : this.VideoCallSDK.createUUID();
     uuidUser: string = localStorage.getItem('uuidUser')
         ? localStorage.getItem('uuidUser').replace(/"/g, '')
-        : VideoCallSDK.createUUID();
+        : this.VideoCallSDK.createUUID();
 
     constructor(public sanitizer: DomSanitizer) {}
 
     ngOnInit() {
-        this.webSocketAPI = new WebSocketAPI(
-            new MainComponent(this.sanitizer),
-            this.uuidAdmin,
-            ConfigVideoCall
-        );
-        this.connect();
+        this.VideoCallSDK.initConfig('call', ConfigVideoCall);
+        this.VideoCallSDK.initSocket(StompJS, this.uuidAdmin);
+    }
+
+    ngOnDestroy() {
+        this.VideoCallSDK.disconnectSocket();
     }
 
     async loginAs(role) {
         alert('login as ' + role);
         if (role === 'admin') {
-            const res = await VideoCallSDK.registerDevice(
+            const res = await this.VideoCallSDK.registerDevice(
                 this.uuidAdmin,
                 this.uuidAdmin,
-                ConfigVideoCall,
                 'admin'
             );
             console.log(res);
@@ -50,11 +50,10 @@ export class MainComponent implements OnInit {
 
     async callVideo() {
         const receiverCallers = [this.uuidUser];
-        const res = await VideoCallSDK.createCall(
+        const res = await this.VideoCallSDK.createCall(
             this.uuidAdmin,
             'admin',
-            receiverCallers,
-            ConfigVideoCall
+            receiverCallers
         );
         console.log('res from app', res);
     }
@@ -68,15 +67,12 @@ export class MainComponent implements OnInit {
 
     async logout() {
         console.log('logout');
-        const res = await VideoCallSDK.removeDevice(
-            this.uuidAdmin,
-            ConfigVideoCall
-        );
+        const res = await this.VideoCallSDK.removeDevice(this.uuidAdmin);
         console.log('remove', res);
     }
 
     async getFile() {
-        const res = await VideoCallSDK.getFile(null, ConfigVideoCall);
+        const res = await this.VideoCallSDK.getFile(null);
         if (res.object.url) {
             this.urlVideo = this.sanitizer.bypassSecurityTrustResourceUrl(
                 res.object.url
@@ -86,29 +82,6 @@ export class MainComponent implements OnInit {
     }
 
     createUUID() {
-        VideoCallSDK.createUUID();
-    }
-
-    getAuthen() {
-        VideoCallSDK.getAuthen(ConfigVideoCall);
-    }
-
-    connect() {
-        this.webSocketAPI._connect();
-    }
-
-    disconnect() {
-        this.webSocketAPI._disconnect();
-    }
-
-    sendMessage() {}
-
-    handleMessage(message) {
-        const mess = JSON.parse(message);
-        VideoCallSDK.handleReceivingMessage(
-            localStorage.getItem('uuidAdmin').replace(/"/g, ''),
-            JSON.parse(mess),
-            ConfigVideoCall
-        );
+        this.VideoCallSDK.createUUID();
     }
 }

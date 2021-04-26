@@ -48,51 +48,20 @@
         <div id="meet"></div>
         <script>
             const ConfigVideoCall = {
-                token_id: '6af3add6-4023-4185-abfe-17b6aaa16b0f',
+                token_id: '',
                 token_key:
-                    'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJA5XkrWo36Y/WLmRD1z79TEKxcDzR/A25o9fqydnxJcvv2lWQLjOuyJaFhyP13TwDWOaRE61VSgZgKKfEuQP5kCAwEAAQ==',
-                client_id: 'videocall',
-                client_secret: 'password',
+                    '',
+                client_id: '',
+                client_secret: '',
             };
-            const uuidAdmin = '5250d256-24a7-4511-949d-90063ec4b869';
             var VideoCallSDK = VideoCall();
-            let roomInfo;
-            try {
-                roomInfo = JSON.parse(localStorage.getItem('roomInfo'));
-            } catch (error) {
-                console.log(error);
-            }
-            console.log('room info', roomInfo);
-            const options = {
-                roomName: roomInfo['roomId'] ? roomInfo['roomId'] : '',
-                width: '100%',
-                height: 590,
-                jwt: roomInfo['token'],
-                configOverwrite: { subject: ' ' }, // set roomName
-                userInfo: {
-                    displayName: roomInfo['caller'],
-                    email: VideoCallSDK.getUUID(),
-                },
-                parentNode: document.querySelector('#meet'),
-            };
-            let api = new window.JitsiMeetExternalAPI(
-                roomInfo['domain'].replace('https://', ''),
-                options
+            VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            VideoCallSDK.initVideoCall(
+                window.JitsiMeetExternalAPI,
+                localStorage.getItem('uuidAdmin').replace(/"/g, ''),
+                '100%',
+                590
             );
-            console.log(options);
-            api.addEventListener('readyToClose', async () => {
-                try {
-                    const res = VideoCallSDK.endCall(
-                        localStorage.getItem('uuidAdmin').replace(/"/g, ''),
-                        ConfigVideoCall
-                    );
-                    window.open('', '_self').close();
-                    console.log(res);
-                    if (res.message === 'IDG-00000000') {
-                        window.open('', '_self').close();
-                    }
-                } catch (error) {}
-            });
         </script>
     </body>
 </html>

@@ -3,9 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AngularFireMessaging } from '@angular/fire/messaging';
-import { AngularFireMessagingModule } from '@angular/fire/messaging';
-import { AngularFireModule } from '@angular/fire';
 import { VideoCallComponent } from './video-call/video-call.component';
 import { MainComponent } from './main/main.component';
 import { FormsModule } from '@angular/forms';
@@ -15,10 +12,9 @@ import { FormsModule } from '@angular/forms';
     imports: [
         BrowserModule,
         AppRoutingModule,
-        AngularFireMessagingModule,
-        FormsModule,
+        FormsModule
     ],
-    providers: [AngularFireMessaging],
+    providers: [],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

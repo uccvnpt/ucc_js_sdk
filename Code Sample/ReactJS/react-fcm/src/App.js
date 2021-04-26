@@ -11,7 +11,6 @@ const App = (props) => {
     const [isPaused, setPause] = useState(false);
     const ws = useRef(null);
     const stompClient = useRef(null);
-    // let urlVideo = null;
     let uuidAdmin: string = localStorage.getItem('uuidAdmin')
         ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
         : VideoCallSDK.createUUID();
@@ -20,40 +19,15 @@ const App = (props) => {
         : VideoCallSDK.createUUID();
     const [user, setUser] = useState(uuidUser);
     const [urlVideo, setUrlVideo] = useState('');
+    
+    VideoCallSDK.initConfig("call", ConfigVideoCall);
+    VideoCallSDK.initSocket(StompJS, uuidAdmin);
 
-    useEffect(() => {
-        _connect();
-    }, []);
-
-    function _connect() {
-        let ws = new WebSocket(
-            'wss://api.idg.vnpt.vn/router-service/websocket'
-        );
-        stompClient.current = StompJS.over(ws);
-        console.log(VideoCallSDK.getTopicUsing(uuidAdmin, ConfigVideoCall));
-        stompClient.current.connect(
-            {},
-            function (frame) {
-                stompClient.current.subscribe(
-                    '/topic/' +
-                        VideoCallSDK.getTopicUsing(uuidAdmin, ConfigVideoCall),
-                    function (sdkEvent) {
-                        onMessageReceived(sdkEvent);
-                    }
-                );
-            },
-            errorCallBack.bind(this)
-        );
-    }
-
-    function errorCallBack(error) {
-        _connect();
-    }
+    useEffect(() => {}, []);
 
     async function getFile() {
-        const res = await VideoCallSDK.getFile(null, ConfigVideoCall);
+        const res = await VideoCallSDK.getFile(null);
         if (res.object && res.object.url) {
-            // urlVideo = res.object.url;
             setUrlVideo(res.object.url);
         }
         console.log('resssss', res);
@@ -76,31 +50,15 @@ const App = (props) => {
 
     async function logout() {
         console.log('logout');
-        const res = await VideoCallSDK.removeDevice(uuidAdmin, ConfigVideoCall);
+        const res = await VideoCallSDK.removeDevice(uuidAdmin);
         console.log('remove', res);
-    }
-
-    function onMessageReceived(message) {
-        console.log('Message Recieved from Server :: ' + message);
-        const messBodyRaw = JSON.stringify(message.body);
-        const messString = JSON.parse(messBodyRaw);
-        VideoCallSDK.handleReceivingMessage(
-            uuidAdmin,
-            JSON.parse(messString),
-            ConfigVideoCall
-        );
     }
 
     function loginAs(role) {
         alert('login as ' + role);
         console.log(VideoCallSDK.getUUID());
         if (role === 'admin') {
-            VideoCallSDK.registerDevice(
-                uuidAdmin,
-                uuidAdmin,
-                ConfigVideoCall,
-                'admin'
-            );
+            VideoCallSDK.registerDevice(uuidAdmin, uuidAdmin, 'admin');
         }
     }
 
@@ -109,22 +67,7 @@ const App = (props) => {
         const res = await VideoCallSDK.createCall(
             uuidAdmin,
             'admin',
-            receiverCallers,
-            ConfigVideoCall
-        );
-    }
-
-    function disconnect() {
-        stompClient.current.disconnect();
-    }
-
-    function handleMessage(message) {
-        const mess = JSON.parse(message);
-        console.log('message', JSON.parse(mess));
-        VideoCallSDK.handleReceivingMessage(
-            uuidUser,
-            JSON.parse(mess),
-            ConfigVideoCall
+            receiverCallers
         );
     }
 
@@ -139,8 +82,8 @@ const App = (props) => {
                     href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
                     rel="stylesheet"
                 />
-                <span class="ml-2">Video call sample (version 2.0.7)</span>
-                <div class="spacer"></div>
+                <span className="ml-2">Video call sample (version 2.0.8)</span>
+                <div className="spacer"></div>
                 <button
                     class="btn btn-success d-inline-flex mr-2"
                     id="user"
@@ -153,7 +96,7 @@ const App = (props) => {
                     id="admin"
                     onClick={() => loginAs('admin')}
                 >
-                    Bước 3: Register device (admin)
+                    Bước 2: Register device (admin)
                 </button>
                 <button
                     class="btn btn-warning d-inline-flex mr-2"
@@ -188,8 +131,8 @@ const App = (props) => {
                                             setUUID(uuidAdmin, 'admin')
                                         }
                                     >
-                                        Bước 1: Thiết lập UUID nguồn (có thể có
-                                        hoặc không)
+                                        Bước 1: Thiết lập Customer ID nguồn (có
+                                        thể có hoặc không)
                                     </button>
                                 </div>
                             </div>
@@ -213,7 +156,8 @@ const App = (props) => {
                                             setUUID(uuidUser, 'user')
                                         }
                                     >
-                                        Bước 2: Thiết lập UUID đích (user)
+                                        Bước 3: Thiết lập Customer ID đích
+                                        (user)
                                     </button>
                                 </div>
                             </div>
