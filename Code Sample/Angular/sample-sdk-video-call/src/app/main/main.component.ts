@@ -29,7 +29,16 @@ export class MainComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.VideoCallSDK.initConfig('call', ConfigVideoCall);
-        this.VideoCallSDK.initSocket(StompJS, this.uuidAdmin);
+        this.VideoCallSDK.initSocket(
+            StompJS,
+            this.uuidAdmin,
+            (success) => {
+                console.log(success);
+            },
+            (event) => {
+                console.log(event);
+            }
+        );
     }
 
     ngOnDestroy() {
