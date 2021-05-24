@@ -210,6 +210,7 @@ const VideoCall = function () {
     let config = null;
     let urlVideoCall = null;
     let api = null;
+    let returnImage = null;
 
     function initConfig(url, configSDK) {
         config = configSDK;
@@ -218,7 +219,14 @@ const VideoCall = function () {
         //     Notification.requestPermission();
         // }
     }
-
+    window.addEventListener("message", function (event) {
+        if (event.data.id == "capture") {
+            if (returnImage) {
+                returnImage(event.data.data);
+            }
+        }
+    });
+    
     function initComponent(callerId, image, name) {
         const rootElement = document.getElementById("root");
         if (rootElement) {
@@ -498,7 +506,8 @@ const VideoCall = function () {
         return api;
     }
 
-    function capture(returnImage) {
+    function capture(returnImageBase64) {
+        returnImage = returnImageBase64;
         const iframe = api.getIFrame();
         const data = {
             id: "capture",
@@ -506,14 +515,13 @@ const VideoCall = function () {
         console.log("capture", data);
         iframe.contentWindow.postMessage(data, "*");
 
-        window.addEventListener("message", function (event) {
-            if (event.data.id == "capture") {
-                console.log("sdk", event.data.data);
-                if (returnImage) {
-                    returnImage(event.data.data);
-                }
-            }
-        });
+        // window.addEventListener("message", function (event) {
+        //     if (event.data.id == "capture") {
+        //         if (returnImage) {
+        //             returnImage(event.data.data);
+        //         }
+        //     }
+        // });
     }
 
     function disconnectSocket() {

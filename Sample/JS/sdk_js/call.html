@@ -33,7 +33,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"
         ></script>
-        <script src="https://meet.jit.si/external_api.js"></script>
+        <script src="https://conference-01.vnpt.vn/external_api.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
@@ -46,6 +46,13 @@
         <script type="text/javascript" src="style-caller.scss"></script>
 
         <div id="meet"></div>
+        <button
+            class="btn btn-success d-inline-flex mr-2"
+            id="admin"
+            onclick="capture()"
+        >
+            Chụp màn hình
+        </button>
         <script>
             const ConfigVideoCall = {
                 token_id: 'be400bf3-9b91-311b-e053-5f4fc10a3519',
@@ -62,6 +69,18 @@
                 '100%',
                 590
             );
+
+            window.addEventListener('message', function (event) {
+                if (event.data.id == 'capture') {
+                    console.log(event.data.data);
+                }
+            });
+            
+            function capture() {
+                VideoCallSDK.capture((base64) => {
+                    console.log(base64);
+                });
+            }
         </script>
     </body>
 </html>
