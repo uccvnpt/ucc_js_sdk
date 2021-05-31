@@ -33,7 +33,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"
         ></script>
-        <script src="https://conference-01.vnpt.vn/external_api.js"></script>
+        <script src="https://meet.jit.si/external_api.js"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
             integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
@@ -41,9 +41,9 @@
         ></script>
     </head>
     <body>
-        <script type="text/javascript" src="VideoCall.js"></script>
-        <script type="text/javascript" src="device-uuid.js"></script>
-        <link rel="stylesheet" href="style-caller.css" />
+        <script src="video-call-js-sdk/VideoCall.js"></script>
+        <script type="text/javascript" src="ConfigVideoCall.js"></script>
+        <link rel="stylesheet" href="video-call-js-sdk/style-caller.css"></link>
         <div>
             <link
                 href="https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,600,600i,700,700i&display=swap"
@@ -53,7 +53,7 @@
                 href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
                 rel="stylesheet"
             />
-            <span class="ml-2">Video call sample (version 2.0.8)</span>
+            <span class="ml-2">Video call sample (version 2.0.9)</span>
             <div class="spacer"></div>
             <button
                 class="btn btn-success d-inline-flex mr-2"
@@ -143,7 +143,6 @@
                     >
                         Get file
                     </button>
-
                     <iframe
                         class="home__hero__video"
                         id="urlVideo"
@@ -161,64 +160,57 @@
 
         <script>
             // Khai báo biến cần thiết
-            var VideoCallSDK = VideoCall();
+            // const uuidAdmin = localStorage.getItem('uuidAdmin')
+            //     ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
+            //     : VideoCallSDK.createUUID();
+            // const uuidUser = localStorage.getItem('uuidUser')
+            //     ? localStorage.getItem('uuidUser').replace(/"/g, '')
+            //     : VideoCallSDK.createUUID();
+
+            // const ConfigVideoCall = {
+            //     token_id: 'be40e688-6d85-58c8-e053-6c1b9f0a4bdf',
+            //     token_key:
+            //         'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI4qY0j034A+rE3JGPKacrQWuPkN1xUiPqzzT4cgKo5ijAlPO5kowDa1N0aQvqf8POyAZwvrdAQBJOzO9E+NLwsCAwEAAQ==',
+            //     client_id: 'd2yHubLupMr2aTksJosFY3c5WtaF4xbaf8QDlD2U',
+            //     client_secret: 'HN44EAm8JJOVdK8Je1cLZdgSqnEJsjYYa0ZDkSX9',
+            // };
+
+            //init config cho sdk
+            var video = VideoCallSDK.initConfig("call.html", ConfigVideoCall);
+            
             const uuidAdmin = localStorage.getItem('uuidAdmin')
                 ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
-                : VideoCallSDK.createUUID();
+                : video.createUUID();
             const uuidUser = localStorage.getItem('uuidUser')
                 ? localStorage.getItem('uuidUser').replace(/"/g, '')
-                : VideoCallSDK.createUUID();
+                : video.createUUID();
 
-            const ConfigVideoCall = {
-                token_id: 'c17a7b3a-3d5b-2b05-e053-604fc10abbdb',
-                token_key:
-                    'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKYWb8Oc3UZ6R9pL6AZMIoiWh2yiA4lzrdR1ziiFH90xeHFYwHL1hSp9vhfaFVnxjxl8pQ25MQjZOsNI3HNgso0CAwEAAQ==',
-                client_id: 'pvPmhuIUyZg6gxUVWYBZh84m2AEow8fgMMGFEXDQ',
-                client_secret: 'ptAuQGVvjROuq4RqYuD1dMw6keHBnPsY790qSfux',
-            };
-            // const ConfigVideoCall = {
-            //     token_id: 'be400bf3-9b91-311b-e053-5f4fc10a3519',
-            //     token_key:
-            //         'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMiy2tvBR5iGiR2smm+/2dCgpAdqk2RdYAggcxKJYsPLurqiQwSrAOaUVoPPU7WS+o8uP246sD9UE+8rlmmTrpsCAwEAAQ==',
-            //     client_id: '2Q0z4vJXaVRBwPyTIy6IZ236eWSBsbDadOGcqrkm',
-            //     client_secret: 'IdbLaOwHUBp23bddqLGC0y8930NdqNTROKZ0s5Y8',
-            // };
+            // thực hiện connect tới socket
+            video.initSocket(Stomp, uuidAdmin);
+            
 
             // let client;
             document.getElementById('uuidAdmin').value = uuidAdmin;
             document.getElementById('uuidUser').value = uuidUser;
             document.getElementById('uuidUserText').innerHTML = uuidUser;
 
-            //init config cho sdk
-            VideoCallSDK.initConfig('call.html', ConfigVideoCall);
-
-            // thực hiện connect tới socket
-            const st = VideoCallSDK.initSocket(
-                Stomp,
-                uuidAdmin,
-                (success) => {
-                    console.log('success', success);
-                },
-                (event) => {
-                    console.log('res', event);
-                }
-            );
 
             //hàm thực hiện xóa device khi logout
             function logout() {
-                VideoCallSDK.removeDevice(uuidAdmin);
+                video.removeDevice(uuidAdmin);
             }
 
             function createUUID() {
-                VideoCallSDK.createUUID();
+                video.createUUID();
             }
 
             function setUUID(type) {
-                const uuidAdminValue =
-                    document.getElementById('uuidAdmin').value;
+                const uuidAdminValue = document.getElementById('uuidAdmin')
+                    .value;
                 const uuidUserValue = document.getElementById('uuidUser').value;
-                document.getElementById('uuidUserText').innerHTML =
-                    uuidUserValue;
+                document.getElementById(
+                    'uuidUserText'
+                ).innerHTML = uuidUserValue;
                 if (type === 'admin') {
                     alert(uuidAdminValue);
                     localStorage.setItem(
@@ -240,7 +232,7 @@
                 const receiverCallers = [
                     localStorage.getItem('uuidUser').replace(/"/g, ''),
                 ];
-                const res = await VideoCallSDK.createCall(
+                const res = await video.createCall(
                     uuidAdmin,
                     'admin',
                     receiverCallers
@@ -251,8 +243,8 @@
             //get url file record
             async function getFile() {
                 const url = document.getElementById('urlVideo');
-                const res = await VideoCallSDK.getFile(null);
-                if (res.object) {
+                const res = await video.getFile(null);
+                if (res && res.object) {
                     url.src = res.object.url;
                 }
                 console.log('getFile', res);
@@ -261,10 +253,10 @@
             function loginAs(role) {
                 alert('login as ' + role);
                 if (role === 'admin') {
-                    VideoCallSDK.registerDevice(
+                    video.registerDevice(
                         uuidAdmin,
                         uuidAdmin,
-                        'super ultra mega admin'
+                        'Những Văn Hẳn'
                     );
                 }
             }

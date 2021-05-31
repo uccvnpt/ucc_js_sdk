@@ -2,82 +2,28 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Econtract</title>
+        <title>Video Call JS SDK</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,600,600i,700,700i&display=swap"
-            rel="stylesheet"
-        />
-        <link
-            href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
-            rel="stylesheet"
-        />
-        <link
-            rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-            crossorigin="anonymous"
-        />
-        <script
-            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"
-        ></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"
-        ></script>
-        <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"
-        ></script>
-        <script src="https://conference-01.vnpt.vn/external_api.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
-            integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
-            crossorigin="anonymous"
-        ></script>
+        <script src="https://meet.jit.si/external_api.js"></script>
     </head>
     <body>
-        <script type="text/javascript" src="VideoCall.js"></script>
-        <script type="text/javascript" src="style-caller.scss"></script>
+        <script src="video-call-js-sdk/VideoCall.js"></script>
+        <script type="text/javascript" src="ConfigVideoCall.js"></script>
+        <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
 
         <div id="meet"></div>
-        <button
-            class="btn btn-success d-inline-flex mr-2"
-            id="admin"
-            onclick="capture()"
-        >
-            Chụp màn hình
-        </button>
         <script>
-            const ConfigVideoCall = {
-                token_id: 'be400bf3-9b91-311b-e053-5f4fc10a3519',
-                token_key:
-                    'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMiy2tvBR5iGiR2smm+/2dCgpAdqk2RdYAggcxKJYsPLurqiQwSrAOaUVoPPU7WS+o8uP246sD9UE+8rlmmTrpsCAwEAAQ==',
-                client_id: '2Q0z4vJXaVRBwPyTIy6IZ236eWSBsbDadOGcqrkm',
-                client_secret: 'IdbLaOwHUBp23bddqLGC0y8930NdqNTROKZ0s5Y8',
-            };
-            var VideoCallSDK = VideoCall();
-            VideoCallSDK.initConfig('call.html', ConfigVideoCall);
-            VideoCallSDK.initVideoCall(
+            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            video.initVideoCall(
                 window.JitsiMeetExternalAPI,
                 localStorage.getItem('uuidAdmin').replace(/"/g, ''),
                 '100%',
                 590
             );
 
-            window.addEventListener('message', function (event) {
-                if (event.data.id == 'capture') {
-                    console.log(event.data.data);
-                }
-            });
-            
+            //lưu ý hàm này chỉ trả về chuỗi base64 khi không phải là file lo
             function capture() {
-                VideoCallSDK.capture((base64) => {
+                video.capture((base64) => {
                     console.log(base64);
                 });
             }
