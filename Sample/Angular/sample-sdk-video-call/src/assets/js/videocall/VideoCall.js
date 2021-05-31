@@ -226,7 +226,7 @@ const VideoCall = function () {
             }
         }
     });
-    
+
     function initComponent(callerId, image, name) {
         const rootElement = document.getElementById("root");
         if (rootElement) {
@@ -363,6 +363,7 @@ const VideoCall = function () {
 
     function setTimeoutEndcall(uuidCustomer) {
         timeout = setTimeout(function () {
+            console.log("time out");
             endCall(uuidCustomer);
             windowCall && windowCall.close();
             stopTimeout();

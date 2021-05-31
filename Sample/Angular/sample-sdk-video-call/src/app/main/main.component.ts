@@ -2,8 +2,10 @@ import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { ConfigVideoCall } from '../ConfigVideoCall';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as StompJS from 'stompjs';
+import * as VideoCallSDK from 'video-call-js-sdk';
 
-declare function VideoCall(): any;
+// declare function VideoCall(): any;
+declare var JitsiMeetExternalAPI: any;
 
 @Component({
     selector: 'app-main',
@@ -11,25 +13,33 @@ declare function VideoCall(): any;
     styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit, OnDestroy {
-    VideoCallSDK = VideoCall();
-    stompClient: any;
-    subscription;
-    message;
+    // VideoCallSDK = VideoCall();
     name: string;
     urlVideo: SafeResourceUrl;
-
-    uuidAdmin: string = localStorage.getItem('uuidAdmin')
-        ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
-        : this.VideoCallSDK.createUUID();
-    uuidUser: string = localStorage.getItem('uuidUser')
-        ? localStorage.getItem('uuidUser').replace(/"/g, '')
-        : this.VideoCallSDK.createUUID();
+    uuidAdmin: string;
+    uuidUser: string;
+    video;
+    urlComponentCall = null;
 
     constructor(public sanitizer: DomSanitizer) {}
 
     ngOnInit() {
-        this.VideoCallSDK.initConfig('call', ConfigVideoCall);
-        this.VideoCallSDK.initSocket(
+        window.onbeforeunload = () => {
+            this.ngOnDestroy();
+        };
+        this.video = VideoCallSDK.initConfig(
+            this.urlComponentCall,
+            ConfigVideoCall
+        );
+
+        this.uuidAdmin = localStorage.getItem('uuidAdmin')
+            ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
+            : this.video.createUUID();
+        this.uuidUser = localStorage.getItem('uuidUser')
+            ? localStorage.getItem('uuidUser').replace(/"/g, '')
+            : this.video.createUUID();
+
+        this.video.initSocket(
             StompJS,
             this.uuidAdmin,
             (success) => {
@@ -37,18 +47,27 @@ export class MainComponent implements OnInit, OnDestroy {
             },
             (event) => {
                 console.log(event);
-            }
+                if (event.title === 'ACCEPTED' && !this.urlComponentCall) {
+                    this.video.initVideoCall(
+                        JitsiMeetExternalAPI,
+                        this.uuidAdmin,
+                        '100%',
+                        590
+                    );
+                }
+            },
+            false
         );
     }
 
     ngOnDestroy() {
-        this.VideoCallSDK.disconnectSocket();
+        this.video.disconnectSocket();
     }
 
     async loginAs(role) {
         alert('login as ' + role);
         if (role === 'admin') {
-            const res = await this.VideoCallSDK.registerDevice(
+            const res = await this.video.registerDevice(
                 this.uuidAdmin,
                 this.uuidAdmin,
                 'admin'
@@ -59,11 +78,19 @@ export class MainComponent implements OnInit, OnDestroy {
 
     async callVideo() {
         const receiverCallers = [this.uuidUser];
-        const res = await this.VideoCallSDK.createCall(
+        const res = await this.video.createCall(
             this.uuidAdmin,
             'admin',
             receiverCallers
         );
+        if (res.message === 'IDG-00000000' && !this.urlComponentCall) {
+            this.video.initVideoCall(
+                JitsiMeetExternalAPI,
+                this.uuidAdmin,
+                '100%',
+                590
+            );
+        }
         console.log('res from app', res);
     }
 
@@ -76,12 +103,12 @@ export class MainComponent implements OnInit, OnDestroy {
 
     async logout() {
         console.log('logout');
-        const res = await this.VideoCallSDK.removeDevice(this.uuidAdmin);
+        const res = await this.video.removeDevice(this.uuidAdmin);
         console.log('remove', res);
     }
 
     async getFile() {
-        const res = await this.VideoCallSDK.getFile(null);
+        const res = await this.video.getFile(null);
         if (res.object.url) {
             this.urlVideo = this.sanitizer.bypassSecurityTrustResourceUrl(
                 res.object.url
@@ -91,6 +118,6 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     createUUID() {
-        this.VideoCallSDK.createUUID();
+        this.video.createUUID();
     }
 }

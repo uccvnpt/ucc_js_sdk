@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigVideoCall } from '../ConfigVideoCall';
+import * as VideoCallSDK from 'video-call-js-sdk';
 
 declare var JitsiMeetExternalAPI: any;
-declare function VideoCall(): any;
-const VideoCallSDK = VideoCall();
+// declare function VideoCall(): any;
+// const VideoCallSDK = VideoCall();
 
 @Component({
     selector: 'app-video-call',
@@ -13,11 +14,12 @@ const VideoCallSDK = VideoCall();
 export class VideoCallComponent implements OnInit {
     api: any;
     imageCapture: any;
+    video;
 
     constructor() {}
     ngOnInit(): void {
-        VideoCallSDK.initConfig('call', ConfigVideoCall);
-        this.api = VideoCallSDK.initVideoCall(
+        this.video = VideoCallSDK.initConfig(null, ConfigVideoCall);
+        this.api = this.video.initVideoCall(
             JitsiMeetExternalAPI,
             localStorage.getItem('uuidAdmin').replace(/"/g, ''),
             '100%',
@@ -26,7 +28,7 @@ export class VideoCallComponent implements OnInit {
     }
 
     capture() {
-        VideoCallSDK.capture((base64) => {
+        this.video.capture((base64) => {
             console.log(base64);
             this.imageCapture = base64;
         });
