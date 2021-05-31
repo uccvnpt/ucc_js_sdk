@@ -1,10 +1,9 @@
-import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfigVideoCall } from '../ConfigVideoCall';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as StompJS from 'stompjs';
 import * as VideoCallSDK from 'video-call-js-sdk';
 
-// declare function VideoCall(): any;
 declare var JitsiMeetExternalAPI: any;
 
 @Component({
@@ -13,7 +12,6 @@ declare var JitsiMeetExternalAPI: any;
     styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit, OnDestroy {
-    // VideoCallSDK = VideoCall();
     name: string;
     urlVideo: SafeResourceUrl;
     uuidAdmin: string;
@@ -68,7 +66,6 @@ export class MainComponent implements OnInit, OnDestroy {
         alert('login as ' + role);
         if (role === 'admin') {
             const res = await this.video.registerDevice(
-                this.uuidAdmin,
                 this.uuidAdmin,
                 'admin'
             );

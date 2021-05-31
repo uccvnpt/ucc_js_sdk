@@ -13,8 +13,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "2.1.8",
     "recompose": "^0.30.0",
-    "sockjs-client": "^1.5.0",
-    "stompjs": "^2.3.3"
+    "stompjs": "^2.3.3",
+    "video-call-js-sdk": "^2.0.20"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,40 +1,49 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ConfigVideoCall } from './ConfigVideoCall';
-import VideoCall from './assets/js/videocall/VideoCall';
 import $ from 'jquery';
 import * as StompJS from 'stompjs';
-
-var VideoCallSDK = VideoCall();
+import * as VideoCall from 'video-call-js-sdk';
+import '../src/assets/css/style-caller.css';
 
 const App = (props) => {
+    const video = VideoCall.initConfig('call', ConfigVideoCall);
+
     const [token, setToken] = useState();
     const [isPaused, setPause] = useState(false);
     const ws = useRef(null);
     const stompClient = useRef(null);
     let uuidAdmin: string = localStorage.getItem('uuidAdmin')
         ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
-        : VideoCallSDK.createUUID();
+        : video.createUUID();
     let uuidUser: string = localStorage.getItem('uuidUser')
         ? localStorage.getItem('uuidUser').replace(/"/g, '')
-        : VideoCallSDK.createUUID();
+        : video.createUUID();
     const [user, setUser] = useState(uuidUser);
     const [urlVideo, setUrlVideo] = useState('');
-    
-    VideoCallSDK.initConfig("call", ConfigVideoCall);
-    VideoCallSDK.initSocket(StompJS, uuidAdmin);
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        video.initSocket(
+            StompJS,
+            uuidAdmin,
+            (success) => {
+                console.log('success', success);
+            },
+            (event) => {
+                console.log('res', event);
+            }
+        );
+    }, []);
 
     async function getFile() {
-        const res = await VideoCallSDK.getFile(null);
-        if (res.object && res.object.url) {
+        const res = await video.getFile(null);
+        if (res && res.object && res.object.url) {
             setUrlVideo(res.object.url);
         }
         console.log('resssss', res);
     }
 
     function createUUID() {
-        const res = VideoCallSDK.createUUID();
+        const res = video.createUUID();
         console.log('uuid', res);
     }
 
@@ -50,25 +59,20 @@ const App = (props) => {
 
     async function logout() {
         console.log('logout');
-        const res = await VideoCallSDK.removeDevice(uuidAdmin);
+        const res = await video.removeDevice(uuidAdmin);
         console.log('remove', res);
     }
 
     function loginAs(role) {
         alert('login as ' + role);
-        console.log(VideoCallSDK.getUUID());
         if (role === 'admin') {
-            VideoCallSDK.registerDevice(uuidAdmin, uuidAdmin, 'admin');
+            video.registerDevice(uuidAdmin, 'admin');
         }
     }
 
     async function callVideo() {
         const receiverCallers = [user];
-        const res = await VideoCallSDK.createCall(
-            uuidAdmin,
-            'admin',
-            receiverCallers
-        );
+        const res = await video.createCall(uuidAdmin, 'admin', receiverCallers);
     }
 
     return (
@@ -82,7 +86,7 @@ const App = (props) => {
                     href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
                     rel="stylesheet"
                 />
-                <span className="ml-2">Video call sample (version 2.0.8)</span>
+                <span className="ml-2">Video call sample (version 2.0.9)</span>
                 <div className="spacer"></div>
                 <button
                     class="btn btn-success d-inline-flex mr-2"

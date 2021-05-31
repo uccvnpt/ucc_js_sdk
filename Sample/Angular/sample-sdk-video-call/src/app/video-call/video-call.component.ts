@@ -3,8 +3,6 @@ import { ConfigVideoCall } from '../ConfigVideoCall';
 import * as VideoCallSDK from 'video-call-js-sdk';
 
 declare var JitsiMeetExternalAPI: any;
-// declare function VideoCall(): any;
-// const VideoCallSDK = VideoCall();
 
 @Component({
     selector: 'app-video-call',
