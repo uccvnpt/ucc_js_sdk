@@ -43,7 +43,7 @@
     <body>
         <script src="video-call-js-sdk/VideoCall.js"></script>
         <script type="text/javascript" src="ConfigVideoCall.js"></script>
-        <link rel="stylesheet" href="video-call-js-sdk/style-caller.css"></link>
+        <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
         <div>
             <link
                 href="https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,600,600i,700,700i&display=swap"
@@ -159,25 +159,10 @@
         <div id="meet"></div>
 
         <script>
-            // Khai báo biến cần thiết
-            // const uuidAdmin = localStorage.getItem('uuidAdmin')
-            //     ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
-            //     : VideoCallSDK.createUUID();
-            // const uuidUser = localStorage.getItem('uuidUser')
-            //     ? localStorage.getItem('uuidUser').replace(/"/g, '')
-            //     : VideoCallSDK.createUUID();
-
-            // const ConfigVideoCall = {
-            //     token_id: 'be40e688-6d85-58c8-e053-6c1b9f0a4bdf',
-            //     token_key:
-            //         'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI4qY0j034A+rE3JGPKacrQWuPkN1xUiPqzzT4cgKo5ijAlPO5kowDa1N0aQvqf8POyAZwvrdAQBJOzO9E+NLwsCAwEAAQ==',
-            //     client_id: 'd2yHubLupMr2aTksJosFY3c5WtaF4xbaf8QDlD2U',
-            //     client_secret: 'HN44EAm8JJOVdK8Je1cLZdgSqnEJsjYYa0ZDkSX9',
-            // };
-
             //init config cho sdk
-            var video = VideoCallSDK.initConfig("call.html", ConfigVideoCall);
-            
+            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+
+            // Khai báo biến cần thiết
             const uuidAdmin = localStorage.getItem('uuidAdmin')
                 ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
                 : video.createUUID();
@@ -186,14 +171,21 @@
                 : video.createUUID();
 
             // thực hiện connect tới socket
-            video.initSocket(Stomp, uuidAdmin);
-            
+            video.initSocket(
+                Stomp,
+                uuidAdmin,
+                (success) => {
+                    console.log(success);
+                },
+                (event) => {
+                    console.log(event);
+                },
+                false
+            );
 
-            // let client;
             document.getElementById('uuidAdmin').value = uuidAdmin;
             document.getElementById('uuidUser').value = uuidUser;
             document.getElementById('uuidUserText').innerHTML = uuidUser;
-
 
             //hàm thực hiện xóa device khi logout
             function logout() {
@@ -205,12 +197,11 @@
             }
 
             function setUUID(type) {
-                const uuidAdminValue = document.getElementById('uuidAdmin')
-                    .value;
+                const uuidAdminValue =
+                    document.getElementById('uuidAdmin').value;
                 const uuidUserValue = document.getElementById('uuidUser').value;
-                document.getElementById(
-                    'uuidUserText'
-                ).innerHTML = uuidUserValue;
+                document.getElementById('uuidUserText').innerHTML =
+                    uuidUserValue;
                 if (type === 'admin') {
                     alert(uuidAdminValue);
                     localStorage.setItem(
@@ -253,10 +244,7 @@
             function loginAs(role) {
                 alert('login as ' + role);
                 if (role === 'admin') {
-                    video.registerDevice(
-                        uuidAdmin,
-                        'Những Văn Hẳn'
-                    );
+                    video.registerDevice(uuidAdmin, 'Những Văn Hẳn');
                 }
             }
         </script>
