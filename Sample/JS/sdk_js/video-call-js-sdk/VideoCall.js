@@ -1,1 +1,1041 @@
-(function(){let t,e,n,o,i,c,r,a;const s="https://api.idg.vnpt.vn/",l=s+"router-service/api/",d={"IDG-00000000":"Thành công! - IDG-00000000","IDG-20000001":"Not null! - IDG-20000001","IDG-20000004":"Kích thước từ 0-255! - IDG-20000004","IDG-20000003":"Kích thước từ 0-4000! - IDG-20000003","IDG-20000005":"Kích thước từ 0-300! - IDG-20000005","IDG-20000006":"Không thuộc định dạng devicetype! - IDG-20000006","IDG-20000007":"Không thuộc định dạng statuscaller! - IDG-20000007","IDG-20000008":"Không thuộc kiểu enum môi trường! - IDG-20000008","IDG-20000100":"Không tìm thấy thiết bị người nhận! - IDG-20000100","IDG-20000201":"Cuộc gọi đang thực hiện! - IDG-20000201","IDG-20000202":"Không tìm thấy cuộc gọi! - IDG-20000202","IDG-20000203":"Người nhận đang trong cuộc gọi khác! - IDG-20000203","IDG-20000101":"Thiết bị người nhận và người gọi là 1! - IDG-20000101","IDG-20000210":"Không tìm thấy host! - IDG-20000210","IDG-20000404":"Không tìm thấy token! - IDG-20000404","IDG-20000211":"Không tìm thấy room! - IDG-20000211","IDG-20000213":"Không phải thiết bị nguồn! - IDG-20000213","IDG-20000214":"Không phải thiết bị đích! - IDG_20000214","IDG-20000215":"Không tồn tại cấu hình của token! - IDG_20000215","IDG-20000216":"Đã có lỗi xảy ra! - IDG-20000216","IDG-20000217":"Số lương thiết bị đăng ký vượt quá số lượng cho phép - IDG-20000217","IDG-20000218":"Thông tin người nhận không hợp lệ - IDG-20000218","IDG-20000219":"Không tìm thấy người gọi, nhận trong cuộc gọi - IDG-20000219","IDG-20000220":"Người nhận và người gọi là một người - IDG-20000220","IDG-20000420":"Cuộc gọi đã kết thúc - IDG-20000420","IDG-20000421":"Cuộc gọi bị từ chối - IDG-20000421","IDG-20000330":"Có lỗi xảy ra khi lấy file ghi âm - IDG-20000330","IDG-20000331":"Người gọi không có quyền truy cập file - IDG-20000331","IDG-20000232":"Cuộc gọi không có chế độ ghi âm, hình - IDG-20000332","IDG-20003001":"Lỗi socket time out - IDG-20000216","IDG-20003002":"Vui lòng kiểm tra kết nối mạng - IDG-20003002","IDG-20003003":"Lỗi kết nối: không kết nối được máy chủ! - IDG-20003003","IDG-20003004":"Lỗi kết nối: quá thời gian hồi đáp! - IDG-20003004","IDG-20003005":"Lỗi socket với message chi tiết - IDG-20003005","IDG-20003006":"Lỗi không xác định với message chi tiết - IDG-20003006","IDG-20002400":"Token đã bị khoá","IDG-20002401":"Bạn không có quyền truy cập","IDG-20002402":"Quá số lượng cuộc gọi đồng thời cho phép","IDG-20002403":"Quá thời lượng cuộc gọi cho phép"};window.addEventListener("message",function(t){"capture"==t.data.id&&a&&a(t.data.data)}),n=function(){const t='<div class="modalSDK" id="ratingModal" tabindex="-1" role="dialog">       <div class="modalContentSDK">           <div class="modalBodySDK">               <div id="review-form-container">                    <div id="review-form">                       <label>Đánh giá chất lượng cuộc gọi</label>                       <div class="fieldset">                            <div class="star-rating">                               <input                                    type="radio"                                   name="rating"                                   value="1"                               /><i></i>                               <input                                   type="radio"                                   name="rating"                                   value="2"                                /><i></i>                               <input                                   type="radio"                                   name="rating"                                   value="3"                               /><i></i>                               <input                                   type="radio"                                   name="rating"                                   value="4"                               /><i></i>                               <input                                   type="radio"                                   name="rating"                                   value="5"                               /><i></i>                           </div>                       </div>                       <textarea id="reviewComments" placeholder="Đánh giá chất lượng cuộc gọi" id="reviewComments" cols="20" rows="5"></textarea>                       <div class="fieldset right">                           <button id="closeRatingButton" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>                           <button id="ratingButton" class="btn btn-outline-primary" data-dismiss="modal">Gửi</button>                       </div>                   </div>               </div>           </div>       </div></div>',e='<div class="modalSDK" id="receivingCalling">       <div class="modalContentSDK">           <div class="modalBodySDK">               <div class="col-12 mb-2 text-center">                   <span>Bạn có một cuộc gọi video từ admin hệ thống, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>               </div>               <div class="row justify-content-center mx-2">                   <button id="acceptCall" type="button" class="btnSDK btnOutlinePrimarySDK mr-2" > Đồng ý</button>                   <button id="rejectCall" type="button" class="btnSDK btnOutlineDangerSDK" data-dismiss="modal"> Hủy</button>                   </div>               </div>           </div>       </div></div>',n='<div class="modalSDK" id="msgModal" tabindex="-1" role="dialog">       <div class="modalContentSDK">           <div class="modalBodySDK">               <div class="col-12 mb-2 text-center">                  <i id="iconMsg" class="fas fa-exclamation-circle" style="color:red;font-size: 44px;"></i>               </div>               <div class="col-12 mb-2 text-center">                   <span ><b id="errMsg"></b></span>               </div>               <div class="row justify-content-center mx-2">                   <button id="closeBtn" type="button" class="btnSDK btnOutlinePrimarySDK" data-dismiss="modal"> Đóng</button>                   </div>               </div>           </div>       </div></div>';function o(){}return o.prototype.initRatingModal=function(e){const n=document.getElementById("root");let o,i;n?n.insertAdjacentHTML("afterbegin",t):document.body.insertAdjacentHTML("afterbegin",t);const c=document.querySelectorAll('input[type=radio][name="rating"]'),a=document.getElementById("reviewComments"),s=(document.getElementById("review-form"),document.getElementById("ratingModal")),l=document.getElementById("closeRatingButton"),d=document.getElementById("ratingButton");function h(t){o=this.value}a.addEventListener("change",function(t){i=this.value}),Array.prototype.forEach.call(c,function(t){t.addEventListener("change",h)}),l.onclick=function(){s.remove()},d.onclick=function(){(o||i)&&r.submitRating(e,o,i),s.remove()},s.style.display="block"},o.prototype.initReceivingModal=function(t,n){const o=document.getElementById("root");o?o.insertAdjacentHTML("afterbegin",e):document.body.insertAdjacentHTML("afterbegin",e);const c=document.getElementById("receivingCalling"),a=document.getElementById("acceptCall"),s=document.getElementById("rejectCall");a.onclick=function(){"CONNECTED"===r.status?(r.acceptCall(t),c.remove()):i("","","Đang kết nối lại, vui lòng chờ trong giây lát","")},s.onclick=function(){"CONNECTED"===r.status?(r.rejectCall(t),c.remove()):i("","","Đang kết nối lại, vui lòng chờ trong giây lát","")},c.style.display="block"},o.prototype.openMsgModal=function(t,e){try{const o=document.getElementById("root");o?o.insertAdjacentHTML("afterbegin",n):document.body.insertAdjacentHTML("afterbegin",n);const i=document.getElementById("errMsg"),c=document.getElementById("iconMsg");"error"===t&&c?(c.className="fas fa-exclamation-circle",c.style.color="red"):(c.className="fas fa-check-circle",c.style.color="green"),i.innerText=e||"";const r=document.getElementById("closeBtn"),a=document.getElementById("msgModal");a.style.display="block",r.onclick=function(){a.remove()}}catch(t){console.log(t)}},o}(),e=function(){function t(t,e,n){this.url=t,this.body=e,this.config=n}return t.prototype.post=async function(){try{c||await this.getAuthen();const t=await fetch(this.url,{method:"POST",mode:"cors",cache:"no-cache",credentials:"same-origin",headers:{"Content-Type":"application/json;charset=UTF-8","Token-id":this.config.token_id,"Token-key":this.config.token_key,"mac-address":"WEB-001",Authorization:c},redirect:"follow",referrerPolicy:"no-referrer",body:JSON.stringify(this.body)});if(t.ok)return t.json();const e=await t.text();throw JSON.parse(e)}catch(t){return t&&"invalid_token"===t.error?(await this.getAuthen(),this.post()):(console.log(t),i(t,t.message,null,"error"),t)}},t.prototype.get=async function(){try{c||await this.getAuthen();const t=await fetch(this.url,{method:"GET",mode:"cors",cache:"no-cache",credentials:"same-origin",headers:{"Content-Type":"application/json;charset=UTF-8","Token-id":this.config.token_id,"Token-key":this.config.token_key,"mac-address":"WEB-001",Authorization:c},redirect:"follow",referrerPolicy:"no-referrer"});if(t.ok)return t.json();const e=await t.text();throw JSON.parse(e)}catch(t){return t&&"invalid_token"===t.error?(await this.getAuthen(),this.get()):(i(t,t.message,null,"error"),t)}},t.prototype.delete=async function(){try{c||await this.getAuthen();const t=await fetch(this.url,{method:"DELETE",mode:"cors",cache:"no-cache",credentials:"same-origin",headers:{"Content-Type":"application/json;charset=UTF-8","Token-id":this.config.token_id,"Token-key":this.config.token_key,"mac-address":"WEB-001",Authorization:c},redirect:"follow",referrerPolicy:"no-referrer",body:JSON.stringify(this.body)});if(t.ok)return t.json();const e=await t.text();throw JSON.parse(e)}catch(t){return t&&"invalid_token"===t.error?(await this.getAuthen(),this.delete()):(i(t,t.message,null,"error"),t)}},t.prototype.postDataForAuthentication=async function(t,e,n){try{return(await fetch(t,{method:"POST",mode:"cors",cache:"no-cache",credentials:"same-origin",headers:{"Content-Type":"application/json"},redirect:"follow",referrerPolicy:"no-referrer",body:JSON.stringify(e)})).json()}catch(t){return t}},t.prototype.getAuthen=async function(){const t={client_id:this.config.client_id,client_secret:this.config.client_secret,grant_type:"client_credentials"},e=await this.postDataForAuthentication(s+"auth-service/oauth/token",t,this.config);return e.access_token&&(c="Bearer "+e.access_token),e.access_token},t}(),t=function(){let t,o,c,r,d,h,g,u=null;function m(t,e){this.config=e,this.windowCall=null,this.pageShow=!1,this.url=t,this.status="DISCONNECTED",this.api=null}return m.prototype.registerDevice=async function(n,o){const i={deviceId:t(),deviceToken:n,deviceTypeId:"WEB",idgTokenId:this.config.token_id,lastDate:new Date,personIdApp:n,personName:o,topicUsing:this.getTopicUsing(n)};return await new e(l+"v2/register-device",i,this.config).post()},m.prototype.createCall=async function(n,c,r){try{if("DISCONNECTED"===this.status)throw"Chưa kết nối socket, vui lòng thử lại sau!";const a={callerId:n,callerName:c,deviceId:t(),idgTokenId:this.config.token_id,reciverCallers:r},s=await new e(l+"v2/create-call",a,this.config).post();return"IDG-00000000"===s.message?(o("roomInfo",{roomId:s.object.roomId,token:s.object.token,domain:s.object.domain,caller:c}),this.url&&this.openWindowCall(n),this.setTimeoutEndcall(n),s):s}catch(t){return i("","",t||"Đã có lỗi xảy ra","error"),t}},m.prototype.acceptCall=async function(n){try{const o=JSON.parse(c("roomInfo")),r={callerId:n,deviceId:t(),idgTokenId:this.config.token_id,roomId:o.roomId},a=await new e(l+"v2/accept-call",r,this.config).post();return"IDG-00000000"===a.message?(this.url&&this.openWindowCall(n),a):a}catch(t){console.log(t),i("","","Đã có lỗi xảy ra","error")}},m.prototype.endCall=async function(n){d(),g(),this.removeIframe();const o=JSON.parse(c("roomInfo"));let i;if(o){const c={callerId:n,deviceId:t(),idgTokenId:this.config.token_id,roomId:o.roomId};i=await new e(l+"v2/end-call",c,this.config).post()}return i},m.prototype.rejectCall=async function(n){g();const o=JSON.parse(c("roomInfo")),i={callerId:n,deviceId:t(),idgTokenId:this.config.token_id,roomId:o.roomId};return await new e(l+"v2/reject-call",i,this.config).post()},m.prototype.removeCall=async function(t){const n=JSON.parse(c("roomInfo")),o={callerId:t,idgTokenId:this.config.token_id,roomId:n.roomId};return await new e(l+"v2/remove-call",o,this.config).post()},m.prototype.removeDevice=async function(n){const o={deviceId:t(),idgTokenId:this.config.token_id,personIdApp:n,deviceTypeId:"WEB"};return localStorage.removeItem("roomInfo"),await new e(l+"v2/remove-device",o,this.config).delete()},m.prototype.getFile=async function(t){try{const n=JSON.parse(c("roomInfo")),o=t||n.roomId;return await new e(l+"v2/external/get-file?roomId="+o,"",this.config).get()}catch(t){console.log(t),i("","","Đã có lỗi xảy ra","error")}},m.prototype.submitRating=async function(n,o,i){const r=JSON.parse(c("roomInfo"));let a;if(r){const c={callComment:i,callQuality:o,callerId:n,deviceId:t(),idgTokenId:this.config.token_id,roomId:r.roomId};a=await new e(l+"v2/external/rating",c,this.config).post()}return a},m.prototype.setTimeoutEndcall=function(t){var e=this;u=setTimeout(function(){console.log("The call is timeout"),e.endCall(t),e.windowCall&&e.windowCall.close()},7e4)},m.prototype.openWindowCall=function(t){try{var e=this;d();const n=void 0!==window.screenLeft?window.screenLeft:window.screenX,o=void 0!==window.screenTop?window.screenTop:window.screenY,c=window.innerWidth?window.innerWidth:document.documentElement.clientWidth?document.documentElement.clientWidth:window.screen.width,r=window.innerHeight?window.innerHeight:document.documentElement.clientHeight?document.documentElement.clientHeight:window.screen.height,a=c/window.screen.availWidth,s=(c-980)/2/a+n,l=(r-500)/2/a+o;if(this.windowCall=window.open(this.url,"videocall",`width=1280,height=600,top=${l},left=${s},menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yesnp`),window.addEventListener("offline",function(){e.windowCall.close()}),!this.windowCall)throw"404-window";this.windowCall.onpageshow=(t=>{this.pageShow=!0}),this.windowCall.onpagehide=(e=>{this.pageShow&&(this.endCall(t),this.pageShow=!1)})}catch(e){"404-window"===e&&(i("","","Vui lòng cho phép Pop-ups bật để thực hiện cuộc gọi ",""),this.endCall(t))}},m.prototype.handleReceivingMessage=function(t,e){switch(e.title){case"ACCEPTED":return console.log("ACCEPTED"),void g();case"PENDING":return console.log("PENDING"),o("roomInfo",{roomId:e.roomId,token:e.token,domain:e.domain}),new n(this.config).initReceivingModal(t,e),void this.setTimeoutEndcall(t);case"REJECTED":return console.log("REJECTED"),g(),this.removeIframe(),i("","","Cuộc gọi đã bị từ chối!",""),this.windowCall&&this.windowCall.close(),void d();case"DENIED":return console.log("DENIED"),void d();case"FINISHED":return console.log("FINISHED"),g(),i("","","Cuộc gọi đã kết thúc!",""),this.windowCall&&this.windowCall.close(),this.removeIframe(),void d();case"TIMEOUT":return console.log("timeout"),this.windowCall&&this.windowCall.close(),this.removeIframe(),void d();default:return}},m.prototype.initSocket=async function(t,n,o,i,c){try{var a=this;const l=await new e(null,null,this.config).getAuthen();let d=`wss://${s.replace("https://","")}router-service/websocket?access_token=${l}`,h=new WebSocket(d);r=t.over(h);let g=this.getTopicUsing(n);return c||(r.heartbeat={outgoing:0,incoming:0}),r.connect({},function(t){o&&o(t.command),a.status="CONNECTED",r.subscribe("/topic/"+g,function(t){const e=JSON.parse(JSON.stringify(t.body));i&&i(JSON.parse(e)),a.handleReceivingMessage(n,JSON.parse(e))},{id:g})},e=>{e&&"[object String]"===Object.prototype.toString.call(e)&&0===e.lastIndexOf("Whoops! Lost connection to",0)&&(o&&o("DISCONNECTED"),this.status="DISCONNECTED",setTimeout(()=>{this.initSocket(t,n,o,i)},3e3))}),r}catch(t){console.log(t)}},m.prototype.disconnectSocket=function(){null!==r&&r.disconnect()},m.prototype.removeIframe=function(){const t=document.querySelector("#meet");if(t)for(;t.firstChild;)t.removeChild(t.firstChild)},m.prototype.initVideoCall=function(e,n,o,i){try{let c=JSON.parse(localStorage.getItem("roomInfo"));document.querySelector("#meet");this.removeIframe();const r={roomName:c.roomId?c.roomId:"",width:o,height:i,jwt:c.token,configOverwrite:{subject:" "},userInfo:{displayName:c.caller,email:t()},parentNode:document.querySelector("#meet")};return this.api=new e(c.domain.replace("https://",""),r),this.api.addEventListener("readyToClose",async()=>{await this.endCall(n),window.open("","_self").close()}),this.api}catch(t){console.log(t)}},m.prototype.getTopicUsing=function(e){return this.config.token_id+"_"+e+"_"+t()},m.prototype.createUUID=function(){const t=([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,t=>(t^crypto.getRandomValues(new Uint8Array(1))[0]&15>>t/4).toString(16));return c("uuid")||o("uuid",t),t},m.prototype.capture=function(t){a=t,console.log(this.windowCall);const e=this.api.getIFrame(),n={id:"capture"};console.log("capture",n),e.contentWindow.postMessage(n,"*")},d=function(){const t=document.getElementById("myModal"),e=document.getElementById("receivingCalling");t&&t.remove(),e&&e.remove()},h=function(){const t=document.getElementById("msgModal");t&&t.remove()},g=function(){clearTimeout(u),u=null},t=function(){try{return c("uuid")&&c("uuid").replace(/"/g,"")}catch(t){console.log(t),i("","","Lỗi không xác định","error")}},o=function(t,e){try{return localStorage.setItem(t,JSON.stringify(e)),!0}catch(t){console.log(t)}},c=function(t){try{return localStorage.getItem(t)}catch(t){}},m}(),i=function(t,e,o,i){try{t.error&&t.message&&d[t.message]?(new n).openMsgModal(i,d[t.message]):t.error&&t.message&&!d[t.message]?(new n).openMsgModal(i,"Lỗi không xác định! Vui lòng thử lại"):o?(new n).openMsgModal(i,o):"IDG-00000000"===t.message&&(new n).openMsgModal(i,d[t.message])}catch(t){console.log(t)}},o={initConfig:function(e,n){return r=new t(e,n)}},"undefined"!=typeof exports&&null!==exports&&(exports.VideoCallSDK=o),"undefined"!=typeof window&&null!==window?window.VideoCallSDK=o:exports||(self.VideoCallSDK=o)}).call(this);
+/* eslint-disable  */
+(function () {
+    let VideoCall,
+        Fetch,
+        Popup,
+        VideoCallSDK,
+        handleMsg,
+        token,
+        video,
+        returnImage;
+    const dev_url = 'https://api.idg.vnpt.vn/';
+    // const dev_url = 'https://explorer.idg.vnpt.vn/';
+    const API_ROUTER = dev_url + 'router-service/api/';
+    const UUID = 'uuid';
+    const ROOM_INFO = 'roomInfo';
+    const PENDING = 'PENDING';
+    const ACCEPTED = 'ACCEPTED';
+    const REJECTED = 'REJECTED';
+    const FINISHED = 'FINISHED';
+    const TIMEOUT = 'TIMEOUT';
+    const DENIED = 'DENIED';
+    const LEAVE = 'LEAVE';
+    const CONNECTED = 'CONNECTED';
+    const DISCONNECTED = 'DISCONNECTED';
+
+    const errorCode = {
+        'IDG-00000000': 'Thành công! - IDG-00000000',
+        'IDG-20000001': 'Not null! - IDG-20000001',
+        'IDG-20000004': 'Kích thước từ 0-255! - IDG-20000004',
+        'IDG-20000003': 'Kích thước từ 0-4000! - IDG-20000003',
+        'IDG-20000005': 'Kích thước từ 0-300! - IDG-20000005',
+        'IDG-20000006': 'Không thuộc định dạng devicetype! - IDG-20000006',
+        'IDG-20000007': 'Không thuộc định dạng statuscaller! - IDG-20000007',
+        'IDG-20000008': 'Không thuộc kiểu enum môi trường! - IDG-20000008',
+        'IDG-20000100': 'Không tìm thấy thiết bị người nhận! - IDG-20000100',
+        'IDG-20000201': 'Cuộc gọi đang thực hiện! - IDG-20000201',
+        'IDG-20000202': 'Không tìm thấy cuộc gọi! - IDG-20000202',
+        'IDG-20000203': 'Người nhận đang trong cuộc gọi khác! - IDG-20000203',
+        'IDG-20000101': 'Thiết bị người nhận và người gọi là 1! - IDG-20000101',
+        'IDG-20000210': 'Không tìm thấy host! - IDG-20000210',
+        'IDG-20000404': 'Không tìm thấy token! - IDG-20000404',
+        'IDG-20000211': 'Không tìm thấy room! - IDG-20000211',
+        'IDG-20000213': 'Không phải thiết bị nguồn! - IDG-20000213',
+        'IDG-20000214': 'Không phải thiết bị đích! - IDG_20000214',
+        'IDG-20000215': 'Không tồn tại cấu hình của token! - IDG_20000215',
+        'IDG-20000216': 'Đã có lỗi xảy ra! - IDG-20000216',
+        'IDG-20000217':
+            'Số lương thiết bị đăng ký vượt quá số lượng cho phép - IDG-20000217',
+        'IDG-20000218': 'Thông tin người nhận không hợp lệ - IDG-20000218',
+        'IDG-20000219':
+            'Không tìm thấy người gọi, nhận trong cuộc gọi - IDG-20000219',
+        'IDG-20000220': 'Người nhận và người gọi là một người - IDG-20000220',
+        'IDG-20000420': 'Cuộc gọi đã kết thúc - IDG-20000420',
+        'IDG-20000421': 'Cuộc gọi bị từ chối - IDG-20000421',
+        'IDG-20000330': 'Có lỗi xảy ra khi lấy file ghi âm - IDG-20000330',
+        'IDG-20000331': 'Người gọi không có quyền truy cập file - IDG-20000331',
+        'IDG-20000232': 'Cuộc gọi không có chế độ ghi âm, hình - IDG-20000332',
+        'IDG-20003001': 'Lỗi socket time out - IDG-20000216',
+        'IDG-20003002': 'Vui lòng kiểm tra kết nối mạng - IDG-20003002',
+        'IDG-20003003':
+            'Lỗi kết nối: không kết nối được máy chủ! - IDG-20003003',
+        'IDG-20003004': 'Lỗi kết nối: quá thời gian hồi đáp! - IDG-20003004',
+        'IDG-20003005': 'Lỗi socket với message chi tiết - IDG-20003005',
+        'IDG-20003006':
+            'Lỗi không xác định với message chi tiết - IDG-20003006',
+        'IDG-20002400': 'Token đã bị khoá',
+        'IDG-20002401': 'Bạn không có quyền truy cập',
+        'IDG-20002402': 'Quá số lượng cuộc gọi đồng thời cho phép',
+        'IDG-20002403': 'Quá thời lượng cuộc gọi cho phép',
+    };
+    window.addEventListener('message', function (event) {
+        if (event.data.id == 'capture') {
+            if (returnImage) {
+                returnImage(event.data.data);
+            }
+        }
+    });
+    Popup = (function () {
+        const initRating =
+            `<div class="modalSDK" id="ratingModal" tabindex="-1" role="dialog">` +
+            `       <div class="modalContentSDK">` +
+            `           <div class="modalBodySDK">` +
+            `               <div id="review-form-container"> ` +
+            `                   <div id="review-form">` +
+            `                       <label>Đánh giá chất lượng cuộc gọi</label>` +
+            `                       <div class="fieldset"> ` +
+            `                           <div class="star-rating">` +
+            `                               <input ` +
+            `                                   type="radio"` +
+            `                                   name="rating"` +
+            `                                   value="1"` +
+            `                               /><i></i>` +
+            `                               <input` +
+            `                                   type="radio"` +
+            `                                   name="rating"` +
+            `                                   value="2" ` +
+            `                               /><i></i>` +
+            `                               <input` +
+            `                                   type="radio"` +
+            `                                   name="rating"` +
+            `                                   value="3"` +
+            `                               /><i></i>` +
+            `                               <input` +
+            `                                   type="radio"` +
+            `                                   name="rating"` +
+            `                                   value="4"` +
+            `                               /><i></i>` +
+            `                               <input` +
+            `                                   type="radio"` +
+            `                                   name="rating"` +
+            `                                   value="5"` +
+            `                               /><i></i>` +
+            `                           </div>` +
+            `                       </div>` +
+            `                       <textarea id="reviewComments" placeholder="Đánh giá chất lượng cuộc gọi" id="reviewComments" cols="20" rows="5"></textarea>` +
+            `                       <div class="fieldset right">` +
+            `                           <button id="closeRatingButton" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>` +
+            `                           <button id="ratingButton" class="btn btn-outline-primary" data-dismiss="modal">Gửi</button>` +
+            `                       </div>` +
+            `                   </div>` +
+            `               </div>` +
+            `           </div>` +
+            `       </div>` +
+            `</div>`;
+
+        const receivingCalling =
+            `<div class="modalSDK" id="receivingCalling">` +
+            `       <div class="modalContentSDK">` +
+            `           <div class="modalBodySDK">` +
+            `               <div class="col-12 mb-2 text-center">` +
+            `                   <span>Bạn có một cuộc gọi video từ admin hệ thống, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>` +
+            `               </div>` +
+            `               <div class="row justify-content-center mx-2">` +
+            `                   <button id="acceptCall" type="button" class="btnSDK btnOutlinePrimarySDK mr-2" > Đồng ý</button>` +
+            `                   <button id="rejectCall" type="button" class="btnSDK btnOutlineDangerSDK" data-dismiss="modal"> Hủy</button>` +
+            `                   </div>` +
+            `               </div>` +
+            `           </div>` +
+            `       </div>` +
+            `</div>`;
+
+        const msgModal =
+            `<div class="modalSDK" id="msgModal" tabindex="-1" role="dialog">` +
+            `       <div class="modalContentSDK">` +
+            `           <div class="modalBodySDK">` +
+            `               <div class="col-12 mb-2 text-center">` +
+            `                  <i id="iconMsg" class="fas fa-exclamation-circle" style="color:red;font-size: 44px;"></i>` +
+            `               </div>` +
+            `               <div class="col-12 mb-2 text-center">` +
+            `                   <span ><b id="errMsg"></b></span>` +
+            `               </div>` +
+            `               <div class="row justify-content-center mx-2">` +
+            `                   <button id="closeBtn" type="button" class="btnSDK btnOutlinePrimarySDK" data-dismiss="modal"> Đóng</button>` +
+            `                   </div>` +
+            `               </div>` +
+            `           </div>` +
+            `       </div>` +
+            `</div>`;
+
+        function Popup() {}
+
+        Popup.prototype.initRatingModal = function (uuidCustomer) {
+            const rootElement = document.getElementById('root');
+            let point;
+            let reviewContent;
+            if (rootElement) {
+                rootElement.insertAdjacentHTML('afterbegin', initRating);
+            } else {
+                document.body.insertAdjacentHTML('afterbegin', initRating);
+            }
+            const radios = document.querySelectorAll(
+                'input[type=radio][name="rating"]'
+            );
+            const reviewValue = document.getElementById('reviewComments');
+            const form = document.getElementById('review-form');
+            const modal = document.getElementById('ratingModal');
+            const closeButton = document.getElementById('closeRatingButton');
+            const ratingButton = document.getElementById('ratingButton');
+
+            function changeHandler(event) {
+                point = this.value;
+            }
+
+            function changeHandlerComment(event) {
+                reviewContent = this.value;
+            }
+
+            reviewValue.addEventListener('change', changeHandlerComment);
+
+            Array.prototype.forEach.call(radios, function (radio) {
+                radio.addEventListener('change', changeHandler);
+            });
+
+            closeButton.onclick = function () {
+                modal.remove();
+                // modal.style.display = 'none';
+            };
+            ratingButton.onclick = function () {
+                if (point || reviewContent) {
+                    video.submitRating(uuidCustomer, point, reviewContent);
+                }
+                modal.remove();
+            };
+            modal.style.display = 'block';
+        };
+
+        Popup.prototype.initReceivingModal = function (uuidUser, data) {
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                rootElement.insertAdjacentHTML('afterbegin', receivingCalling);
+            } else {
+                document.body.insertAdjacentHTML(
+                    'afterbegin',
+                    receivingCalling
+                );
+            }
+
+            const receiving = document.getElementById('receivingCalling');
+            const accept = document.getElementById('acceptCall');
+            const rejectBtn = document.getElementById('rejectCall');
+
+            accept.onclick = function () {
+                if (video.status === CONNECTED) {
+                    video.acceptCall(uuidUser);
+                    receiving.remove();
+                } else {
+                    handleMsg(
+                        '',
+                        '',
+                        'Đang kết nối lại, vui lòng chờ trong giây lát',
+                        ''
+                    );
+                }
+            };
+            rejectBtn.onclick = function () {
+                if (video.status === CONNECTED) {
+                    video.rejectCall(uuidUser);
+                    receiving.remove();
+                } else {
+                    handleMsg(
+                        '',
+                        '',
+                        'Đang kết nối lại, vui lòng chờ trong giây lát',
+                        ''
+                    );
+                }
+            };
+            receiving.style.display = 'block';
+        };
+
+        Popup.prototype.openMsgModal = function (type, message) {
+            try {
+                const rootElement = document.getElementById('root');
+                if (rootElement) {
+                    rootElement.insertAdjacentHTML('afterbegin', msgModal);
+                } else {
+                    document.body.insertAdjacentHTML('afterbegin', msgModal);
+                }
+
+                const msg = document.getElementById('errMsg');
+
+                const iconMsg = document.getElementById('iconMsg');
+
+                if (type === 'error' && iconMsg) {
+                    iconMsg.className = 'fas fa-exclamation-circle';
+                    iconMsg.style.color = 'red';
+                } else {
+                    iconMsg.className = 'fas fa-check-circle';
+                    iconMsg.style.color = 'green';
+                }
+
+                msg.innerText = message ? message : '';
+                const close = document.getElementById('closeBtn');
+                const modalMSG = document.getElementById('msgModal');
+
+                modalMSG.style.display = 'block';
+                close.onclick = function () {
+                    modalMSG.remove();
+                };
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        return Popup;
+    })();
+
+    Fetch = (function () {
+        function Fetch(url, body, config) {
+            this.url = url;
+            this.body = body;
+            this.config = config;
+        }
+
+        Fetch.prototype.post = async function () {
+            try {
+                if (!token) {
+                    await this.getAuthen();
+                }
+                const response = await fetch(this.url, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'Token-id': this.config.token_id,
+                        'Token-key': this.config.token_key,
+                        'mac-address': 'WEB-001',
+                        Authorization: token,
+                    },
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
+                    body: JSON.stringify(this.body),
+                });
+                if (response.ok) {
+                    return response.json();
+                }
+                const error = await response.text();
+                throw JSON.parse(error);
+            } catch (error) {
+                if (error && error.error === 'invalid_token') {
+                    await this.getAuthen();
+                    return this.post();
+                }
+                console.log(error);
+                handleMsg(error, error.message, null, 'error');
+                return error;
+            }
+        };
+
+        Fetch.prototype.get = async function () {
+            try {
+                if (!token) {
+                    await this.getAuthen();
+                }
+                const response = await fetch(this.url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'Token-id': this.config.token_id,
+                        'Token-key': this.config.token_key,
+                        'mac-address': 'WEB-001',
+                        Authorization: token,
+                    },
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
+                });
+                if (response.ok) {
+                    return response.json();
+                }
+                const error = await response.text();
+                throw JSON.parse(error);
+            } catch (error) {
+                if (error && error.error === 'invalid_token') {
+                    await this.getAuthen();
+                    return this.get();
+                }
+                handleMsg(error, error.message, null, 'error');
+                return error;
+            }
+        };
+
+        Fetch.prototype.delete = async function () {
+            try {
+                if (!token) {
+                    await this.getAuthen();
+                }
+                const response = await fetch(this.url, {
+                    method: 'DELETE',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'Token-id': this.config.token_id,
+                        'Token-key': this.config.token_key,
+                        'mac-address': 'WEB-001',
+                        Authorization: token,
+                    },
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
+                    body: JSON.stringify(this.body),
+                });
+                if (response.ok) {
+                    return response.json();
+                }
+                const error = await response.text();
+                throw JSON.parse(error);
+            } catch (error) {
+                if (error && error.error === 'invalid_token') {
+                    await this.getAuthen();
+                    return this.delete();
+                }
+                handleMsg(error, error.message, null, 'error');
+                return error;
+            }
+        };
+
+        Fetch.prototype.postDataForAuthentication = async function (
+            url,
+            param,
+            config
+        ) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
+                    body: JSON.stringify(param),
+                });
+                return response.json();
+            } catch (e) {
+                return e;
+            }
+        };
+
+        Fetch.prototype.getAuthen = async function () {
+            const param = {
+                client_id: this.config.client_id,
+                client_secret: this.config.client_secret,
+                grant_type: 'client_credentials',
+            };
+            const res = await this.postDataForAuthentication(
+                dev_url + 'auth-service/oauth/token',
+                param,
+                this.config
+            );
+            if (res.access_token) {
+                token = 'Bearer ' + res.access_token;
+            }
+            return res.access_token;
+        };
+        return Fetch;
+    })();
+
+    // Video call sdk
+    VideoCall = (function () {
+        let getUUID,
+            setItem,
+            getItem,
+            stompClient,
+            hideModal,
+            hideNoti,
+            stopTimeout;
+        let timeout = null;
+
+        function VideoCall(url, config) {
+            this.config = config;
+            this.windowCall = null;
+            this.pageShow = false;
+            this.url = url;
+            this.status = 'DISCONNECTED';
+            this.api = null;
+        }
+
+        VideoCall.prototype.registerDevice = async function (
+            uuidCustomer,
+            personName
+        ) {
+            const body = {
+                deviceId: getUUID(),
+                deviceToken: uuidCustomer,
+                deviceTypeId: 'WEB',
+                idgTokenId: this.config.token_id,
+                lastDate: new Date(),
+                personIdApp: uuidCustomer,
+                personName: personName,
+                topicUsing: this.getTopicUsing(uuidCustomer),
+            };
+            return await new Fetch(
+                API_ROUTER + 'v2/register-device',
+                body,
+                this.config
+            ).post();
+        };
+
+        VideoCall.prototype.createCall = async function (
+            callerId,
+            callerName,
+            reciverCallers,
+            additionalData
+        ) {
+            try {
+                if (this.status === DISCONNECTED) {
+                    throw 'Chưa kết nối socket, vui lòng thử lại sau!';
+                }
+                const body = {
+                    callerId: callerId,
+                    callerName: callerName,
+                    deviceId: getUUID(),
+                    idgTokenId: this.config.token_id,
+                    reciverCallers: reciverCallers,
+                    additionalData: additionalData,
+                };
+                const res = await new Fetch(
+                    API_ROUTER + 'v2/create-call',
+                    body,
+                    this.config
+                ).post();
+                if (res.message === 'IDG-00000000') {
+                    setItem(ROOM_INFO, {
+                        roomId: res.object.roomId,
+                        token: res.object.token,
+                        domain: res.object.domain,
+                        caller: callerName,
+                        additionalData: additionalData,
+                    });
+                    if (this.url) {
+                        this.openWindowCall(callerId);
+                    }
+                    // this.setTimeoutEndcall(callerId);
+                    return res;
+                }
+                return res;
+            } catch (e) {
+                if (e) {
+                    handleMsg('', '', e, 'error');
+                } else {
+                    handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
+                }
+                return e;
+            }
+        };
+
+        VideoCall.prototype.acceptCall = async function (callerId) {
+            try {
+                const roomInfo = JSON.parse(getItem(ROOM_INFO));
+                const paramv2 = {
+                    callerId: callerId,
+                    deviceId: getUUID(),
+                    idgTokenId: this.config.token_id,
+                    roomId: roomInfo.roomId,
+                };
+                const res = await new Fetch(
+                    API_ROUTER + 'v2/accept-call',
+                    paramv2,
+                    this.config
+                ).post();
+                if (res.message === 'IDG-00000000') {
+                    if (this.url) {
+                        this.openWindowCall(callerId);
+                    }
+                    return res;
+                }
+                return res;
+            } catch (e) {
+                console.log(e);
+                handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
+            }
+        };
+
+        VideoCall.prototype.endCall = async function (callerId) {
+            hideModal();
+            stopTimeout();
+            this.removeIframe();
+            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            let res;
+            if (roomInfo) {
+                const param = {
+                    callerId: callerId,
+                    deviceId: getUUID(),
+                    idgTokenId: this.config.token_id,
+                    roomId: roomInfo.roomId,
+                };
+                res = await new Fetch(
+                    API_ROUTER + 'v2/end-call',
+                    param,
+                    this.config
+                ).post();
+            }
+            return res;
+        };
+
+        VideoCall.prototype.rejectCall = async function (callerId) {
+            stopTimeout();
+            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            const paramv2 = {
+                callerId: callerId,
+                deviceId: getUUID(),
+                idgTokenId: this.config.token_id,
+                roomId: roomInfo.roomId,
+            };
+            return await new Fetch(
+                API_ROUTER + 'v2/reject-call',
+                paramv2,
+                this.config
+            ).post();
+        };
+
+        VideoCall.prototype.removeCall = async function (callerId) {
+            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            const param = {
+                callerId: callerId,
+                idgTokenId: this.config.token_id,
+                roomId: roomInfo.roomId,
+            };
+            return await new Fetch(
+                API_ROUTER + 'v2/remove-call',
+                param,
+                this.config
+            ).post();
+        };
+
+        VideoCall.prototype.removeDevice = async function (personIdApp) {
+            const param = {
+                deviceId: getUUID(),
+                idgTokenId: this.config.token_id,
+                personIdApp: personIdApp,
+                deviceTypeId: 'WEB',
+            };
+            localStorage.removeItem(ROOM_INFO);
+            return await new Fetch(
+                API_ROUTER + 'v2/remove-device',
+                param,
+                this.config
+            ).delete();
+        };
+
+        VideoCall.prototype.getFile = async function (id) {
+            try {
+                const roomInfo = JSON.parse(getItem(ROOM_INFO));
+                const roomId = id ? id : roomInfo.roomId;
+                return await new Fetch(
+                    API_ROUTER + 'v2/external/get-file?roomId=' + roomId,
+                    '',
+                    this.config
+                ).get();
+            } catch (e) {
+                console.log(e);
+                handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
+            }
+        };
+
+        VideoCall.prototype.submitRating = async function (
+            callerId,
+            callQuality,
+            callComment
+        ) {
+            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            let res;
+            if (roomInfo) {
+                const param = {
+                    callComment: callComment,
+                    callQuality: callQuality,
+                    callerId: callerId,
+                    deviceId: getUUID(),
+                    idgTokenId: this.config.token_id,
+                    roomId: roomInfo.roomId,
+                };
+                res = await new Fetch(
+                    API_ROUTER + 'v2/external/rating',
+                    param,
+                    this.config
+                ).post();
+            }
+            return res;
+        };
+
+        VideoCall.prototype.setTimeoutEndcall = function (callerId) {
+            var _this = this;
+            timeout = setTimeout(function () {
+                console.log('The call is timeout');
+                _this.endCall(callerId);
+                _this.windowCall && _this.windowCall.close();
+            }, 70000);
+        };
+
+        VideoCall.prototype.openWindowCall = function (callerId) {
+            try {
+                var _this = this;
+                hideModal();
+                const dualScreenLeft =
+                    window.screenLeft !== undefined
+                        ? window.screenLeft
+                        : window.screenX;
+                const dualScreenTop =
+                    window.screenTop !== undefined
+                        ? window.screenTop
+                        : window.screenY;
+
+                const width = window.innerWidth
+                    ? window.innerWidth
+                    : document.documentElement.clientWidth
+                    ? document.documentElement.clientWidth
+                    : window.screen.width;
+                const height = window.innerHeight
+                    ? window.innerHeight
+                    : document.documentElement.clientHeight
+                    ? document.documentElement.clientHeight
+                    : window.screen.height;
+
+                const systemZoom = width / window.screen.availWidth;
+                const left = (width - 980) / 2 / systemZoom + dualScreenLeft;
+                const top = (height - 500) / 2 / systemZoom + dualScreenTop;
+
+                this.windowCall = window.open(
+                    this.url,
+                    'videocall',
+                    `width=1280,height=600,top=${top},left=${left},menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yesnp`
+                );
+                window.addEventListener('offline', function () {
+                    _this.windowCall.close();
+                });
+
+                if (!this.windowCall) {
+                    throw '404-window';
+                }
+                this.windowCall.onpageshow = (event) => {
+                    this.pageShow = true;
+                };
+
+                this.windowCall.onpagehide = (event) => {
+                    if (this.pageShow) {
+                        this.endCall(callerId);
+                        this.pageShow = false;
+                    }
+                };
+            } catch (e) {
+                if (e === '404-window') {
+                    handleMsg(
+                        '',
+                        '',
+                        'Vui lòng cho phép Pop-ups bật để thực hiện cuộc gọi ',
+                        ''
+                    );
+                    this.endCall(callerId);
+                }
+            }
+        };
+
+        VideoCall.prototype.handleReceivingMessage = function (
+            uuidCustomer,
+            message
+        ) {
+            switch (message['title']) {
+                case ACCEPTED:
+                    console.log('ACCEPTED');
+                    stopTimeout();
+                    return;
+                case PENDING:
+                    console.log('PENDING');
+                    setItem(ROOM_INFO, {
+                        roomId: message.roomId,
+                        token: message.token,
+                        domain: message.domain,
+                    });
+                    new Popup(this.config).initReceivingModal(
+                        uuidCustomer,
+                        message
+                    );
+                    // this.setTimeoutEndcall(uuidCustomer);
+                    return;
+                case REJECTED:
+                    console.log('REJECTED');
+                    stopTimeout();
+                    this.removeIframe();
+                    handleMsg('', '', 'Cuộc gọi đã bị từ chối!', '');
+                    this.windowCall && this.windowCall.close();
+                    hideModal();
+                    return;
+                case DENIED:
+                    console.log('DENIED');
+                    hideModal();
+                    return;
+                case FINISHED:
+                    console.log('FINISHED');
+                    stopTimeout();
+                    handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
+                    this.windowCall && this.windowCall.close();
+                    this.removeIframe();
+                    hideModal();
+                    return;
+                case TIMEOUT:
+                    console.log('timeout');
+                    this.windowCall && this.windowCall.close();
+                    this.removeIframe();
+                    hideModal();
+                    return;
+                default:
+                    return;
+            }
+        };
+
+        VideoCall.prototype.initSocket = async function (
+            StompJS,
+            uuidCustomer,
+            successCallback,
+            returnInSomething,
+            enableHeartbeat
+        ) {
+            try {
+                var _this = this;
+                const access_token = await new Fetch(
+                    null,
+                    null,
+                    this.config
+                ).getAuthen();
+                let webSocketEndPoint = `wss://${dev_url.replace(
+                    'https://',
+                    ''
+                )}router-service/websocket?access_token=${access_token}`;
+                let ws = new WebSocket(webSocketEndPoint);
+                stompClient = StompJS.over(ws);
+                let mysubid = this.getTopicUsing(uuidCustomer);
+                if (!enableHeartbeat) {
+                    stompClient.heartbeat = { outgoing: 0, incoming: 0 };
+                }
+                stompClient.connect(
+                    {},
+                    function (frame) {
+                        if (successCallback) {
+                            successCallback(frame.command);
+                        }
+                        _this.status = CONNECTED;
+                        stompClient.subscribe(
+                            '/topic/' + mysubid,
+                            function (sdkEvent) {
+                                const mess = JSON.parse(
+                                    JSON.stringify(sdkEvent.body)
+                                );
+                                if (returnInSomething) {
+                                    returnInSomething(JSON.parse(mess));
+                                }
+                                _this.handleReceivingMessage(
+                                    uuidCustomer,
+                                    JSON.parse(mess)
+                                );
+                            },
+                            { id: mysubid }
+                        );
+                    },
+                    (error) => {
+                        if (
+                            error &&
+                            Object.prototype.toString.call(error) ===
+                                '[object String]' &&
+                            error.lastIndexOf(
+                                'Whoops! Lost connection to',
+                                0
+                            ) === 0
+                        ) {
+                            if (successCallback) {
+                                successCallback(DISCONNECTED);
+                            }
+                            this.status = DISCONNECTED;
+                            setTimeout(() => {
+                                this.initSocket(
+                                    StompJS,
+                                    uuidCustomer,
+                                    successCallback,
+                                    returnInSomething,
+                                    enableHeartbeat
+                                );
+                            }, 3000);
+                        }
+                    }
+                );
+                return stompClient;
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        VideoCall.prototype.disconnectSocket = function () {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+        };
+
+        VideoCall.prototype.removeIframe = function () {
+            const meetNode = document.querySelector('#meet');
+            if (meetNode) {
+                while (meetNode.firstChild) {
+                    meetNode.removeChild(meetNode.firstChild);
+                }
+            }
+        };
+
+        VideoCall.prototype.initVideoCall = function (
+            JitsiMeetExternalAPI,
+            uuidCustomer,
+            width,
+            height
+        ) {
+            try {
+                let roomInfo = JSON.parse(localStorage.getItem('roomInfo'));
+                const meetNode = document.querySelector('#meet');
+                this.removeIframe();
+                const options = {
+                    roomName: roomInfo['roomId'] ? roomInfo['roomId'] : '',
+                    width: width,
+                    height: height,
+                    jwt: roomInfo['token'],
+                    configOverwrite: { subject: ' ' },
+                    userInfo: {
+                        displayName: roomInfo['caller'],
+                        email: getUUID(),
+                    },
+                    parentNode: document.querySelector('#meet'),
+                };
+                this.api = new JitsiMeetExternalAPI(
+                    roomInfo['domain'].replace('https://', ''),
+                    options
+                );
+                this.api.addEventListener('readyToClose', async () => {
+                    await this.endCall(uuidCustomer);
+                    window.open('', '_self').close();
+                });
+                return this.api;
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        VideoCall.prototype.getTopicUsing = function (customerId) {
+            return this.config.token_id + '_' + customerId + '_' + getUUID();
+        };
+
+        VideoCall.prototype.createUUID = function () {
+            const uuidv4 = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
+                /[018]/g,
+                (c) =>
+                    (
+                        c ^
+                        (crypto.getRandomValues(new Uint8Array(1))[0] &
+                            (15 >> (c / 4)))
+                    ).toString(16)
+            );
+            if (!getItem(UUID)) {
+                setItem(UUID, uuidv4);
+            }
+            return uuidv4;
+        };
+
+        VideoCall.prototype.capture = function (returnImageBase64) {
+            returnImage = returnImageBase64;
+            console.log(this.windowCall);
+            const iframe = this.api.getIFrame();
+            const data = {
+                id: 'capture',
+            };
+            console.log('capture', data);
+            iframe.contentWindow.postMessage(data, '*');
+        };
+
+        hideModal = function () {
+            const callingModal = document.getElementById('myModal');
+            const receivingModal = document.getElementById('receivingCalling');
+            if (callingModal) {
+                callingModal.remove();
+            }
+            if (receivingModal) {
+                receivingModal.remove();
+            }
+        };
+
+        hideNoti = function () {
+            const modalMSG = document.getElementById('msgModal');
+            if (modalMSG) {
+                modalMSG.remove();
+            }
+        };
+
+        stopTimeout = function () {
+            clearTimeout(timeout);
+            timeout = null;
+        };
+
+        getUUID = function () {
+            try {
+                return getItem(UUID) && getItem(UUID).replace(/"/g, '');
+            } catch (e) {
+                console.log(e);
+                handleMsg('', '', 'Lỗi không xác định', 'error');
+            }
+        };
+
+        setItem = function (key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        getItem = function (key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {}
+        };
+
+        return VideoCall;
+    })();
+
+    handleMsg = function (res, errorMsg, message, type) {
+        try {
+            if (res.error && res.message && errorCode[res.message]) {
+                new Popup().openMsgModal(type, errorCode[res.message]);
+            } else if (res.error && res.message && !errorCode[res.message]) {
+                new Popup().openMsgModal(
+                    type,
+                    'Lỗi không xác định! Vui lòng thử lại'
+                );
+            } else if (message) {
+                new Popup().openMsgModal(type, message);
+            } else if (res.message === 'IDG-00000000') {
+                new Popup().openMsgModal(type, errorCode[res.message]);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    VideoCallSDK = {
+        initConfig: function (url, config) {
+            video = new VideoCall(url, config);
+            return video;
+        },
+    };
+
+    if (typeof exports !== 'undefined' && exports !== null) {
+        exports.VideoCallSDK = VideoCallSDK;
+    }
+
+    if (typeof window !== 'undefined' && window !== null) {
+        window.VideoCallSDK = VideoCallSDK;
+    } else if (!exports) {
+        self.VideoCallSDK = VideoCallSDK;
+    }
+}.call(this));

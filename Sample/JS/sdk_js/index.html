@@ -41,6 +41,7 @@
         ></script>
     </head>
     <body>
+        <script src="https://ucc.vnpt.vn/assets/js/VideoCall.min.js"></script>
         <script src="video-call-js-sdk/VideoCall.js"></script>
         <script type="text/javascript" src="ConfigVideoCall.js"></script>
         <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
@@ -180,7 +181,7 @@
                 (event) => {
                     console.log(event);
                 },
-                false
+                true
             );
 
             document.getElementById('uuidAdmin').value = uuidAdmin;
@@ -223,10 +224,15 @@
                 const receiverCallers = [
                     localStorage.getItem('uuidUser').replace(/"/g, ''),
                 ];
+                const additionalData = {
+                    request_id: '123abc',
+                    userid: 'abc456',
+                };
                 const res = await video.createCall(
                     uuidAdmin,
                     'admin',
-                    receiverCallers
+                    receiverCallers,
+                    additionalData
                 );
                 console.log('call', res);
             }
