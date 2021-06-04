@@ -491,9 +491,13 @@
             additionalData
         ) {
             try {
+                if (this.getOS() === 'iOS' || this.getOS() === 'Android') {
+                    throw 'Tính năng Video Call trên web chỉ hỗ trợ trên trình duyệt của desktop';
+                }
                 if (this.status === DISCONNECTED) {
                     throw 'Chưa kết nối socket, vui lòng thử lại sau!';
                 }
+
                 const body = {
                     callerId: callerId,
                     callerName: callerName,
@@ -800,6 +804,7 @@
         ) {
             try {
                 var _this = this;
+                let lastMessSocket = null;
                 const access_token = await new Fetch(
                     null,
                     null,
@@ -828,13 +833,25 @@
                                 const mess = JSON.parse(
                                     JSON.stringify(sdkEvent.body)
                                 );
-                                if (returnInSomething) {
-                                    returnInSomething(JSON.parse(mess));
+                                const messParse = JSON.parse(mess);
+
+                                if (
+                                    lastMessSocket &&
+                                    messParse.title === lastMessSocket.title &&
+                                    messParse.roomId === lastMessSocket.roomId
+                                ) {
+                                    // console.log('duplicate');
+                                    return;
+                                } else {
+                                    if (returnInSomething) {
+                                        returnInSomething(JSON.parse(mess));
+                                    }
+                                    _this.handleReceivingMessage(
+                                        uuidCustomer,
+                                        messParse
+                                    );
                                 }
-                                _this.handleReceivingMessage(
-                                    uuidCustomer,
-                                    JSON.parse(mess)
-                                );
+                                lastMessSocket = messParse;
                             },
                             { id: mysubid }
                         );
@@ -951,6 +968,29 @@
             };
             console.log('capture', data);
             iframe.contentWindow.postMessage(data, '*');
+        };
+
+        VideoCall.prototype.getOS = function () {
+            var userAgent = window.navigator.userAgent,
+                platform = window.navigator.platform,
+                macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+                windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+                iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+                os = null;
+
+            if (macosPlatforms.indexOf(platform) !== -1) {
+                os = 'Mac OS';
+            } else if (iosPlatforms.indexOf(platform) !== -1) {
+                os = 'iOS';
+            } else if (windowsPlatforms.indexOf(platform) !== -1) {
+                os = 'Windows';
+            } else if (/Android/.test(userAgent)) {
+                os = 'Android';
+            } else if (!os && /Linux/.test(platform)) {
+                os = 'Linux';
+            }
+
+            return os;
         };
 
         hideModal = function () {
