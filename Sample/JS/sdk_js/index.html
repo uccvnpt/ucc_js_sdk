@@ -161,16 +161,17 @@
 
         <script>
             //init config cho sdk
+            let connection = null;
             const video = VideoCallSDK.initConfig(
                 'call.html',
-                ConfigVideoCall,
+                ConfigVideoCall
+            );
+
+            const video2 = VideoCallSDK.initConfig(
+                'call.html',
                 ConfigVideoCall2
             );
-            // const video2 = VideoCallSDK.initConfig(
-            //     'call.html',
-            //     ConfigVideoCall2
-            // );
-
+          
             // Khai báo biến cần thiết
             const uuidAdmin = localStorage.getItem('uuidAdmin')
                 ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
@@ -179,30 +180,32 @@
                 ? localStorage.getItem('uuidUser').replace(/"/g, '')
                 : video.createUUID();
 
-            // thực hiện connect tới socket
-            video.initSocket(
-                Stomp,
-                uuidAdmin,
-                (success) => {
+            video.initConnection(Stomp,  (success) => {
                     console.log(success);
-                },
-                (event) => {
-                    console.log(event);
-                },
-                true
-            );
+                    subscribeTopic();
+                }).then(res => {
+                    console.log(res);
+                    connection = res;
+            });
 
-            // video2.initSocket(
-            //     Stomp,
-            //     uuidAdmin,
-            //     (success) => {
-            //         console.log(success);
-            //     },
-            //     (event) => {
-            //         console.log(event);
-            //     },
-            //     true
-            // );
+            function subscribeTopic() {
+                video.initSocket(
+                        connection,
+                        uuidAdmin,
+                        (event) => {
+                            console.log('video',event);
+                        },
+                    );
+                video2.initSocket(
+                        connection,
+                        uuidAdmin,
+                        (event) => {
+                            console.log('video2',event);
+                        },
+                    );
+            }
+
+           
             document.getElementById('uuidAdmin').value = uuidAdmin;
             document.getElementById('uuidUser').value = uuidUser;
             document.getElementById('uuidUserText').innerHTML = uuidUser;
