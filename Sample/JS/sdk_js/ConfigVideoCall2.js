@@ -1,9 +1,9 @@
-const ConfigVideoCall = {
-    token_id: 'c2cfc739-38dd-86b3-e053-604fc10a3fe3',
+const ConfigVideoCall2 = {
+    token_id: 'be400bf3-9b91-311b-e053-5f4fc10a3519',
     token_key:
-        'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAITNxJZ6mZko++nXfGoKdN73CfrZLpKGHDN0x6JGjOWjZ0j7nZhn9ez0sjXZMtn+e0+yWQ5/rH209TdLgownIWkCAwEAAQ==',
-    client_id: 'AQWlnsxU5IP29cIIAW7D6A6w7zLouxBjRAO1zUA2',
-    client_secret: 'ltf1JJ4QxB03l6LLIaB3KQqFsyxPrHotRXMmQIV5',
+        'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMiy2tvBR5iGiR2smm+/2dCgpAdqk2RdYAggcxKJYsPLurqiQwSrAOaUVoPPU7WS+o8uP246sD9UE+8rlmmTrpsCAwEAAQ==',
+    client_id: '2Q0z4vJXaVRBwPyTIy6IZ236eWSBsbDadOGcqrkm',
+    client_secret: 'IdbLaOwHUBp23bddqLGC0y8930NdqNTROKZ0s5Y8',
 };
 
 // const ConfigVideoCall = {

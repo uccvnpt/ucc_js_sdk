@@ -454,8 +454,10 @@
             stopTimeout;
         let timeout = null;
 
-        function VideoCall(url, config) {
-            this.config = config;
+        function VideoCall(url, config1, config2) {
+            this.config = config1;
+            this.config1 = config1;
+            this.config2 = config2;
             this.windowCall = null;
             this.pageShow = false;
             this.url = url;
@@ -491,13 +493,9 @@
             additionalData
         ) {
             try {
-                if (this.getOS() === 'iOS' || this.getOS() === 'Android') {
-                    throw 'Tính năng Video Call trên web chỉ hỗ trợ trên trình duyệt của desktop';
-                }
                 if (this.status === DISCONNECTED) {
                     throw 'Chưa kết nối socket, vui lòng thử lại sau!';
                 }
-
                 const body = {
                     callerId: callerId,
                     callerName: callerName,
@@ -816,10 +814,13 @@
                 )}router-service/websocket?access_token=${access_token}`;
                 let ws = new WebSocket(webSocketEndPoint);
                 stompClient = StompJS.over(ws);
-                let mysubid = this.getTopicUsing(uuidCustomer);
+                let mysubid1 = this.getTopicUsing(uuidCustomer, this.config1);
+                let mysubid2 = this.getTopicUsing(uuidCustomer, this.config2);
                 if (!enableHeartbeat) {
                     stompClient.heartbeat = { outgoing: 0, incoming: 0 };
                 }
+
+                //sub config thứ 1
                 stompClient.connect(
                     {},
                     function (frame) {
@@ -828,7 +829,7 @@
                         }
                         _this.status = CONNECTED;
                         stompClient.subscribe(
-                            '/topic/' + mysubid,
+                            '/topic/' + mysubid1,
                             function (sdkEvent) {
                                 const mess = JSON.parse(
                                     JSON.stringify(sdkEvent.body)
@@ -840,12 +841,13 @@
                                     messParse.title === lastMessSocket.title &&
                                     messParse.roomId === lastMessSocket.roomId
                                 ) {
-                                    // console.log('duplicate');
                                     return;
                                 } else {
                                     if (returnInSomething) {
                                         returnInSomething(JSON.parse(mess));
                                     }
+                                    _this.config = _this.config1;
+
                                     _this.handleReceivingMessage(
                                         uuidCustomer,
                                         messParse
@@ -853,7 +855,37 @@
                                 }
                                 lastMessSocket = messParse;
                             },
-                            { id: mysubid }
+                            { id: mysubid1 }
+                        );
+
+                        //sub config thứ 2
+                        stompClient.subscribe(
+                            '/topic/' + mysubid2,
+                            function (sdkEvent) {
+                                const mess = JSON.parse(
+                                    JSON.stringify(sdkEvent.body)
+                                );
+                                const messParse = JSON.parse(mess);
+
+                                if (
+                                    lastMessSocket &&
+                                    messParse.title === lastMessSocket.title &&
+                                    messParse.roomId === lastMessSocket.roomId
+                                ) {
+                                    return;
+                                } else {
+                                    if (returnInSomething) {
+                                        returnInSomething(JSON.parse(mess));
+                                    }
+                                    _this.config = _this.config2;
+                                    _this.handleReceivingMessage(
+                                        uuidCustomer,
+                                        messParse
+                                    );
+                                }
+                                lastMessSocket = messParse;
+                            },
+                            { id: mysubid2 }
                         );
                     },
                     (error) => {
@@ -896,7 +928,7 @@
 
         VideoCall.prototype.removeIframe = function () {
             const meetNode = document.querySelector('#meet');
-            if (meetNode) {
+            if (meetNode && !this.url) {
                 while (meetNode.firstChild) {
                     meetNode.removeChild(meetNode.firstChild);
                 }
@@ -939,8 +971,8 @@
             }
         };
 
-        VideoCall.prototype.getTopicUsing = function (customerId) {
-            return this.config.token_id + '_' + customerId + '_' + getUUID();
+        VideoCall.prototype.getTopicUsing = function (customerId, config) {
+            return config.token_id + '_' + customerId + '_' + getUUID();
         };
 
         VideoCall.prototype.createUUID = function () {
@@ -968,29 +1000,6 @@
             };
             console.log('capture', data);
             iframe.contentWindow.postMessage(data, '*');
-        };
-
-        VideoCall.prototype.getOS = function () {
-            var userAgent = window.navigator.userAgent,
-                platform = window.navigator.platform,
-                macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
-                windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
-                iosPlatforms = ['iPhone', 'iPad', 'iPod'],
-                os = null;
-
-            if (macosPlatforms.indexOf(platform) !== -1) {
-                os = 'Mac OS';
-            } else if (iosPlatforms.indexOf(platform) !== -1) {
-                os = 'iOS';
-            } else if (windowsPlatforms.indexOf(platform) !== -1) {
-                os = 'Windows';
-            } else if (/Android/.test(userAgent)) {
-                os = 'Android';
-            } else if (!os && /Linux/.test(platform)) {
-                os = 'Linux';
-            }
-
-            return os;
         };
 
         hideModal = function () {
@@ -1063,8 +1072,8 @@
     };
 
     VideoCallSDK = {
-        initConfig: function (url, config) {
-            video = new VideoCall(url, config);
+        initConfig: function (url, config1, config2) {
+            video = new VideoCall(url, config1, config2);
             return video;
         },
     };

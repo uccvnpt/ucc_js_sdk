@@ -43,6 +43,7 @@
     <body>
         <script src="video-call-js-sdk/VideoCall.js"></script>
         <script type="text/javascript" src="ConfigVideoCall.js"></script>
+        <script type="text/javascript" src="ConfigVideoCall2.js"></script>
         <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
         <div>
             <link
@@ -160,7 +161,15 @@
 
         <script>
             //init config cho sdk
-            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            const video = VideoCallSDK.initConfig(
+                'call.html',
+                ConfigVideoCall,
+                ConfigVideoCall2
+            );
+            // const video2 = VideoCallSDK.initConfig(
+            //     'call.html',
+            //     ConfigVideoCall2
+            // );
 
             // Khai báo biến cần thiết
             const uuidAdmin = localStorage.getItem('uuidAdmin')
@@ -183,6 +192,17 @@
                 true
             );
 
+            // video2.initSocket(
+            //     Stomp,
+            //     uuidAdmin,
+            //     (success) => {
+            //         console.log(success);
+            //     },
+            //     (event) => {
+            //         console.log(event);
+            //     },
+            //     true
+            // );
             document.getElementById('uuidAdmin').value = uuidAdmin;
             document.getElementById('uuidUser').value = uuidUser;
             document.getElementById('uuidUserText').innerHTML = uuidUser;
