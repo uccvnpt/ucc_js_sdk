@@ -395,7 +395,7 @@
                     await this.getAuthen();
                     return this.get();
                 }
-                handleMsg(error, error.message, null, 'error');
+                // handleMsg(error, error.message, null, 'error');
                 return error;
             }
         };
@@ -624,22 +624,33 @@
 
         VideoCall.prototype.rejectCall = async function (callerId) {
             stopTimeout();
-            hideModal();
+            // hideModal();
             let res;
             // const roomInfo = JSON.parse(getItem(ROOM_INFO));
             if (this.roomInfo) {
-                console.log(this.roomInfo);
                 const paramv2 = {
                     callerId: callerId,
                     deviceId: getUUID(),
                     idgTokenId: this.config.token_id,
                     roomId: this.roomInfo.roomId,
                 };
-                res = await new Fetch(
-                    API_ROUTER + 'v2/reject-call',
-                    paramv2,
+                callroom = await new Fetch(
+                    API_ROUTER + 'v2/check-call?roomId=' + this.roomInfo.roomId,
+                    '',
                     this.config
-                ).post();
+                ).get();
+                if (callroom && callroom.message === 'IDG-00000000') {
+                    res = await new Fetch(
+                        API_ROUTER + 'v2/reject-call',
+                        paramv2,
+                        this.config
+                    ).post();
+                }
+                // res = await new Fetch(
+                //     API_ROUTER + 'v2/reject-call',
+                //     paramv2,
+                //     this.config
+                // ).post();
             }
             return res;
         };
@@ -685,6 +696,23 @@
             } catch (e) {
                 console.log(e);
                 handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
+            }
+        };
+
+        VideoCall.prototype.checkCall = async function () {
+            try {
+                if (this.roomInfo) {
+                    return await new Fetch(
+                        API_ROUTER +
+                            'v2/check-call?roomId=' +
+                            this.roomInfo.roomId,
+                        '',
+                        this.config
+                    ).get();
+                }
+            } catch (e) {
+                console.log(e);
+                // handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
             }
         };
 

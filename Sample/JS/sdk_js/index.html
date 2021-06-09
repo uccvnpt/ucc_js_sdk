@@ -190,29 +190,18 @@
             //tiến hành subscribe các topic cần để lắng nghe event trả về
             function subscribeTopic(stompClient) {
                 //ví dụ ở đây ccbs sẽ lắng nghe các event trả về
-                ccbs.initSocket(stompClient, uuidAdmin, (event) => {
+                ccbs.initSocket(stompClient, uuidAdmin, async (event) => {
                     console.log('ccbs', event);
                     if (event.title === 'PENDING') {
-                        incomingCallCCBS = true;
-                        if (incomingCallCMSC) {
-                            console.log('incomingCallCMSC', incomingCallCMSC);
-                            console.log('ccbs');
-                            smcs.rejectCall(uuidAdmin);
-                            incomingCallCMSC = false;
-                        }
+                        smcs.rejectCall(uuidAdmin);
                     }
                 });
 
                 //smcs sẽ lắng nghe các event trả về
-                smcs.initSocket(stompClient, uuidAdmin, (event) => {
+                smcs.initSocket(stompClient, uuidAdmin, async (event) => {
                     console.log('smcs', event);
                     if (event.title === 'PENDING') {
-                        incomingCallCMSC = true;
-                        if (incomingCallCCBS) {
-                            console.log('smcs');
-                            ccbs.rejectCall(uuidAdmin);
-                            incomingCallCCBS = false;
-                        }
+                        ccbs.rejectCall(uuidAdmin);
                     }
                 });
             }
