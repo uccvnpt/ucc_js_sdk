@@ -548,6 +548,13 @@
                         caller: callerName,
                         additionalData: additionalData,
                     });
+                    this.roomInfo = {
+                        roomId: res.object.roomId,
+                        token: res.object.token,
+                        domain: res.object.domain,
+                        caller: callerName,
+                        additionalData: additionalData,
+                    };
                     if (this.url) {
                         this.openWindowCall(callerId);
                     }
@@ -567,12 +574,13 @@
 
         VideoCall.prototype.acceptCall = async function (callerId) {
             try {
-                const roomInfo = JSON.parse(getItem(ROOM_INFO));
+                hideModal();
+                // const roomInfo = JSON.parse(getItem(ROOM_INFO));
                 const paramv2 = {
                     callerId: callerId,
                     deviceId: getUUID(),
                     idgTokenId: this.config.token_id,
-                    roomId: roomInfo.roomId,
+                    roomId: this.roomInfo.roomId,
                 };
                 const res = await new Fetch(
                     API_ROUTER + 'v2/accept-call',
@@ -596,14 +604,14 @@
             hideModal();
             stopTimeout();
             // this.removeIframe();
-            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            // const roomInfo = JSON.parse(getItem(ROOM_INFO));
             let res;
-            if (roomInfo) {
+            if (this.roomInfo) {
                 const param = {
                     callerId: callerId,
                     deviceId: getUUID(),
                     idgTokenId: this.config.token_id,
-                    roomId: roomInfo.roomId,
+                    roomId: this.roomInfo.roomId,
                 };
                 res = await new Fetch(
                     API_ROUTER + 'v2/end-call',
@@ -616,26 +624,32 @@
 
         VideoCall.prototype.rejectCall = async function (callerId) {
             stopTimeout();
-            const roomInfo = JSON.parse(getItem(ROOM_INFO));
-            const paramv2 = {
-                callerId: callerId,
-                deviceId: getUUID(),
-                idgTokenId: this.config.token_id,
-                roomId: roomInfo.roomId,
-            };
-            return await new Fetch(
-                API_ROUTER + 'v2/reject-call',
-                paramv2,
-                this.config
-            ).post();
+            hideModal();
+            let res;
+            // const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            if (this.roomInfo) {
+                console.log(this.roomInfo);
+                const paramv2 = {
+                    callerId: callerId,
+                    deviceId: getUUID(),
+                    idgTokenId: this.config.token_id,
+                    roomId: this.roomInfo.roomId,
+                };
+                res = await new Fetch(
+                    API_ROUTER + 'v2/reject-call',
+                    paramv2,
+                    this.config
+                ).post();
+            }
+            return res;
         };
 
         VideoCall.prototype.removeCall = async function (callerId) {
-            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            // const roomInfo = JSON.parse(getItem(ROOM_INFO));
             const param = {
                 callerId: callerId,
                 idgTokenId: this.config.token_id,
-                roomId: roomInfo.roomId,
+                roomId: this.roomInfo.roomId,
             };
             return await new Fetch(
                 API_ROUTER + 'v2/remove-call',
@@ -661,8 +675,8 @@
 
         VideoCall.prototype.getFile = async function (id) {
             try {
-                const roomInfo = JSON.parse(getItem(ROOM_INFO));
-                const roomId = id ? id : roomInfo.roomId;
+                // const roomInfo = JSON.parse(getItem(ROOM_INFO));
+                const roomId = id ? id : this.roomInfo.roomId;
                 return await new Fetch(
                     API_ROUTER + 'v2/external/get-file?roomId=' + roomId,
                     '',
@@ -679,16 +693,16 @@
             callQuality,
             callComment
         ) {
-            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            // const roomInfo = JSON.parse(getItem(ROOM_INFO));
             let res;
-            if (roomInfo) {
+            if (this.roomInfo) {
                 const param = {
                     callComment: callComment,
                     callQuality: callQuality,
                     callerId: callerId,
                     deviceId: getUUID(),
                     idgTokenId: this.config.token_id,
-                    roomId: roomInfo.roomId,
+                    roomId: this.roomInfo.roomId,
                 };
                 res = await new Fetch(
                     API_ROUTER + 'v2/external/rating',
@@ -792,6 +806,7 @@
                         token: message.token,
                         domain: message.domain,
                     });
+                    hideModal();
                     this.initReceivingModal(uuidCustomer);
                     // this.setTimeoutEndcall(uuidCustomer);
                     return;
@@ -799,7 +814,12 @@
                     console.log('REJECTED');
                     stopTimeout();
                     // this.removeIframe();
-                    handleMsg('', '', 'Cuộc gọi đã bị từ chối!', '');
+                    handleMsg(
+                        '',
+                        '',
+                        'Cuộc gọi bị từ chối hoặc kỹ thuật viên đang bận!',
+                        ''
+                    );
                     this.windowCall && this.windowCall.close();
                     hideModal();
                     return;
@@ -940,7 +960,7 @@
         ) {
             try {
                 let roomInfo = JSON.parse(localStorage.getItem('roomInfo'));
-                const meetNode = document.querySelector('#meet');
+                // const meetNode = document.querySelector('#meet');
                 // this.removeIframe();
                 const options = {
                     roomName: roomInfo['roomId'] ? roomInfo['roomId'] : '',
