@@ -7,15 +7,19 @@
         <script src="https://meet.jit.si/external_api.js"></script>
     </head>
     <body>
-        <!-- <script src="https://ucc.vnpt.vn/assets/js/VideoCall.min.js"></script> -->
         <script src="video-call-js-sdk/VideoCall.js"></script>
         <script type="text/javascript" src="ConfigVideoCall.js"></script>
+        <script type="text/javascript" src="ConfigVideoCall2.js"></script>
         <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
 
         <div id="meet" style="height: 100vh"></div>
         <script>
-            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
-            video.initVideoCall(
+            //init config cho sdk
+            const ccbs = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            //chú ý 2 bộ config khác nhau
+            const smcs = VideoCallSDK.initConfig('call.html', ConfigVideoCall2);
+
+            smcs.initVideoCall(
                 window.JitsiMeetExternalAPI,
                 localStorage.getItem('uuidAdmin').replace(/"/g, ''),
                 '100%',
@@ -24,7 +28,7 @@
 
             //lưu ý hàm này chỉ trả về chuỗi base64 khi không phải là file lo
             function capture() {
-                video.capture((base64) => {
+                ccbs.capture((base64) => {
                     console.log(base64);
                 });
             }

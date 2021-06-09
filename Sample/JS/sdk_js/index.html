@@ -161,62 +161,54 @@
 
         <script>
             //init config cho sdk
-            let connection = null;
-            const video = VideoCallSDK.initConfig(
-                'call.html',
-                ConfigVideoCall
-            );
+            //chú ý 2 bộ key config khác nhau
 
-            const video2 = VideoCallSDK.initConfig(
-                'call.html',
-                ConfigVideoCall2
-            );
-          
+            const ccbs = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            const smcs = VideoCallSDK.initConfig('call.html', ConfigVideoCall2);
+
             // Khai báo biến cần thiết
             const uuidAdmin = localStorage.getItem('uuidAdmin')
                 ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
-                : video.createUUID();
+                : ccbs.createUUID();
             const uuidUser = localStorage.getItem('uuidUser')
                 ? localStorage.getItem('uuidUser').replace(/"/g, '')
-                : video.createUUID();
+                : ccbs.createUUID();
 
-            video.initConnection(Stomp,  (success) => {
-                    console.log(success);
-                    subscribeTopic();
-                }).then(res => {
-                    console.log(res);
-                    connection = res;
+            //khởi tạo kết nối
+            //status: trạng thái kết nối socket
+            //stompClient: biến trả về sau khi đã connect đc socket
+            ccbs.initConnection(Stomp, (status, stompClient) => {
+                console.log(status);
+                if (status === 'CONNECTED') {
+                    // sau khi đã kết nối thành công, chúng ta subscribe các bên cần lắng nghe
+                    subscribeTopic(stompClient);
+                }
             });
 
-            function subscribeTopic() {
-                video.initSocket(
-                        connection,
-                        uuidAdmin,
-                        (event) => {
-                            console.log('video',event);
-                        },
-                    );
-                video2.initSocket(
-                        connection,
-                        uuidAdmin,
-                        (event) => {
-                            console.log('video2',event);
-                        },
-                    );
+            //tiến hành subscribe các topic cần để lắng nghe event trả về
+            function subscribeTopic(stompClient) {
+                //ví dụ ở đây ccbs sẽ lắng nghe các event trả về
+                ccbs.initSocket(stompClient, uuidAdmin, (event) => {
+                    console.log('ccbs', event);
+                });
+
+                //smcs sẽ lắng nghe các event trả về
+                smcs.initSocket(stompClient, uuidAdmin, (event) => {
+                    console.log('smcs', event);
+                });
             }
 
-           
             document.getElementById('uuidAdmin').value = uuidAdmin;
             document.getElementById('uuidUser').value = uuidUser;
             document.getElementById('uuidUserText').innerHTML = uuidUser;
 
             //hàm thực hiện xóa device khi logout
             function logout() {
-                video.removeDevice(uuidAdmin);
+                smcs.removeDevice(uuidAdmin);
             }
 
             function createUUID() {
-                video.createUUID();
+                smcs.createUUID();
             }
 
             function setUUID(type) {
@@ -250,7 +242,7 @@
                     request_id: '123abc',
                     userid: 'abc456',
                 };
-                const res = await video.createCall(
+                const res = await smcs.createCall(
                     uuidAdmin,
                     'admin',
                     receiverCallers,
@@ -262,7 +254,7 @@
             //get url file record
             async function getFile() {
                 const url = document.getElementById('urlVideo');
-                const res = await video.getFile(null);
+                const res = await smcs.getFile(null);
                 if (res && res.object) {
                     url.src = res.object.url;
                 }
@@ -272,7 +264,7 @@
             function loginAs(role) {
                 alert('login as ' + role);
                 if (role === 'admin') {
-                    video.registerDevice(uuidAdmin, 'Những Văn Hẳn');
+                    smcs.registerDevice(uuidAdmin, 'Những Văn Hẳn');
                 }
             }
         </script>

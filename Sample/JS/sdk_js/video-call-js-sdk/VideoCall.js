@@ -8,65 +8,65 @@
         token,
         video,
         returnImage;
-    const dev_url = "https://api.idg.vnpt.vn/";
+    const dev_url = 'https://api.idg.vnpt.vn/';
     // const dev_url = 'https://explorer.idg.vnpt.vn/';
-    const API_ROUTER = dev_url + "router-service/api/";
-    const UUID = "uuid";
-    const ROOM_INFO = "roomInfo";
-    const PENDING = "PENDING";
-    const ACCEPTED = "ACCEPTED";
-    const REJECTED = "REJECTED";
-    const FINISHED = "FINISHED";
-    const TIMEOUT = "TIMEOUT";
-    const DENIED = "DENIED";
-    const LEAVE = "LEAVE";
-    const CONNECTED = "CONNECTED";
-    const DISCONNECTED = "DISCONNECTED";
+    const API_ROUTER = dev_url + 'router-service/api/';
+    const UUID = 'uuid';
+    const ROOM_INFO = 'roomInfo';
+    const PENDING = 'PENDING';
+    const ACCEPTED = 'ACCEPTED';
+    const REJECTED = 'REJECTED';
+    const FINISHED = 'FINISHED';
+    const TIMEOUT = 'TIMEOUT';
+    const DENIED = 'DENIED';
+    const LEAVE = 'LEAVE';
+    const CONNECTED = 'CONNECTED';
+    const DISCONNECTED = 'DISCONNECTED';
 
     const errorCode = {
-        "IDG-00000000": "Thành công! - IDG-00000000",
-        "IDG-20000001": "Not null! - IDG-20000001",
-        "IDG-20000004": "Kích thước từ 0-255! - IDG-20000004",
-        "IDG-20000003": "Kích thước từ 0-4000! - IDG-20000003",
-        "IDG-20000005": "Kích thước từ 0-300! - IDG-20000005",
-        "IDG-20000006": "Không thuộc định dạng devicetype! - IDG-20000006",
-        "IDG-20000007": "Không thuộc định dạng statuscaller! - IDG-20000007",
-        "IDG-20000008": "Không thuộc kiểu enum môi trường! - IDG-20000008",
-        "IDG-20000100": "Không tìm thấy thiết bị người nhận! - IDG-20000100",
-        "IDG-20000201": "Cuộc gọi đang thực hiện! - IDG-20000201",
-        "IDG-20000202": "Không tìm thấy cuộc gọi! - IDG-20000202",
-        "IDG-20000203": "Người nhận đang trong cuộc gọi khác! - IDG-20000203",
-        "IDG-20000101": "Thiết bị người nhận và người gọi là 1! - IDG-20000101",
-        "IDG-20000210": "Không tìm thấy host! - IDG-20000210",
-        "IDG-20000404": "Không tìm thấy token! - IDG-20000404",
-        "IDG-20000211": "Không tìm thấy room! - IDG-20000211",
-        "IDG-20000213": "Không phải thiết bị nguồn! - IDG-20000213",
-        "IDG-20000214": "Không phải thiết bị đích! - IDG_20000214",
-        "IDG-20000215": "Không tồn tại cấu hình của token! - IDG_20000215",
-        "IDG-20000216": "Đã có lỗi xảy ra! - IDG-20000216",
-        "IDG-20000217":
-            "Số lương thiết bị đăng ký vượt quá số lượng cho phép - IDG-20000217",
-        "IDG-20000218": "Thông tin người nhận không hợp lệ - IDG-20000218",
-        "IDG-20000219":
-            "Không tìm thấy người gọi, nhận trong cuộc gọi - IDG-20000219",
-        "IDG-20000220": "Người nhận và người gọi là một người - IDG-20000220",
-        "IDG-20000420": "Cuộc gọi đã kết thúc - IDG-20000420",
-        "IDG-20000421": "Cuộc gọi bị từ chối - IDG-20000421",
-        "IDG-20000330": "Có lỗi xảy ra khi lấy file ghi âm - IDG-20000330",
-        "IDG-20000331": "Người gọi không có quyền truy cập file - IDG-20000331",
-        "IDG-20000232": "Cuộc gọi không có chế độ ghi âm, hình - IDG-20000332",
-        "IDG-20003001": "Lỗi socket time out - IDG-20000216",
-        "IDG-20003002": "Vui lòng kiểm tra kết nối mạng - IDG-20003002",
-        "IDG-20003003":
-            "Lỗi kết nối: không kết nối được máy chủ! - IDG-20003003",
-        "IDG-20003004": "Lỗi kết nối: quá thời gian hồi đáp! - IDG-20003004",
-        "IDG-20003005": "Lỗi socket với message chi tiết - IDG-20003005",
-        "IDG-20003006":
-            "Lỗi không xác định với message chi tiết - IDG-20003006",
-        "IDG-20002400": "Token đã bị khoá",
-        "IDG-20002401": "Bạn không có quyền truy cập",
-        "IDG-20002402": "Quá số lượng cuộc gọi đồng thời cho phép",
-        "IDG-20002403": "Quá thời lượng cuộc gọi cho phép",
+        'IDG-00000000': 'Thành công! - IDG-00000000',
+        'IDG-20000001': 'Not null! - IDG-20000001',
+        'IDG-20000004': 'Kích thước từ 0-255! - IDG-20000004',
+        'IDG-20000003': 'Kích thước từ 0-4000! - IDG-20000003',
+        'IDG-20000005': 'Kích thước từ 0-300! - IDG-20000005',
+        'IDG-20000006': 'Không thuộc định dạng devicetype! - IDG-20000006',
+        'IDG-20000007': 'Không thuộc định dạng statuscaller! - IDG-20000007',
+        'IDG-20000008': 'Không thuộc kiểu enum môi trường! - IDG-20000008',
+        'IDG-20000100': 'Không tìm thấy thiết bị người nhận! - IDG-20000100',
+        'IDG-20000201': 'Cuộc gọi đang thực hiện! - IDG-20000201',
+        'IDG-20000202': 'Không tìm thấy cuộc gọi! - IDG-20000202',
+        'IDG-20000203': 'Người nhận đang trong cuộc gọi khác! - IDG-20000203',
+        'IDG-20000101': 'Thiết bị người nhận và người gọi là 1! - IDG-20000101',
+        'IDG-20000210': 'Không tìm thấy host! - IDG-20000210',
+        'IDG-20000404': 'Không tìm thấy token! - IDG-20000404',
+        'IDG-20000211': 'Không tìm thấy room! - IDG-20000211',
+        'IDG-20000213': 'Không phải thiết bị nguồn! - IDG-20000213',
+        'IDG-20000214': 'Không phải thiết bị đích! - IDG_20000214',
+        'IDG-20000215': 'Không tồn tại cấu hình của token! - IDG_20000215',
+        'IDG-20000216': 'Đã có lỗi xảy ra! - IDG-20000216',
+        'IDG-20000217':
+            'Số lương thiết bị đăng ký vượt quá số lượng cho phép - IDG-20000217',
+        'IDG-20000218': 'Thông tin người nhận không hợp lệ - IDG-20000218',
+        'IDG-20000219':
+            'Không tìm thấy người gọi, nhận trong cuộc gọi - IDG-20000219',
+        'IDG-20000220': 'Người nhận và người gọi là một người - IDG-20000220',
+        'IDG-20000420': 'Cuộc gọi đã kết thúc - IDG-20000420',
+        'IDG-20000421': 'Cuộc gọi bị từ chối - IDG-20000421',
+        'IDG-20000330': 'Có lỗi xảy ra khi lấy file ghi âm - IDG-20000330',
+        'IDG-20000331': 'Người gọi không có quyền truy cập file - IDG-20000331',
+        'IDG-20000232': 'Cuộc gọi không có chế độ ghi âm, hình - IDG-20000332',
+        'IDG-20003001': 'Lỗi socket time out - IDG-20000216',
+        'IDG-20003002': 'Vui lòng kiểm tra kết nối mạng - IDG-20003002',
+        'IDG-20003003':
+            'Lỗi kết nối: không kết nối được máy chủ! - IDG-20003003',
+        'IDG-20003004': 'Lỗi kết nối: quá thời gian hồi đáp! - IDG-20003004',
+        'IDG-20003005': 'Lỗi socket với message chi tiết - IDG-20003005',
+        'IDG-20003006':
+            'Lỗi không xác định với message chi tiết - IDG-20003006',
+        'IDG-20002400': 'Token đã bị khoá',
+        'IDG-20002401': 'Bạn không có quyền truy cập',
+        'IDG-20002402': 'Quá số lượng cuộc gọi đồng thời cho phép',
+        'IDG-20002403': 'Quá thời lượng cuộc gọi cho phép',
     };
 
     const initRating =
@@ -121,7 +121,7 @@
         `       <div class="modalContentSDK">` +
         `           <div class="modalBodySDK">` +
         `               <div class="col-12 mb-2 text-center">` +
-        `                   <span>Bạn có một cuộc gọi video từ admin hệ thống, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>` +
+        `                   <span>Bạn có một cuộc gọi video call, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>` +
         `               </div>` +
         `               <div class="row justify-content-center mx-2">` +
         `                   <button id="acceptCall" type="button" class="btnSDK btnOutlinePrimarySDK mr-2" > Đồng ý</button>` +
@@ -149,8 +149,8 @@
         `           </div>` +
         `       </div>` +
         `</div>`;
-    window.addEventListener("message", function (event) {
-        if (event.data.id == "capture") {
+    window.addEventListener('message', function (event) {
+        if (event.data.id == 'capture') {
             if (returnImage) {
                 returnImage(event.data.data);
             }
@@ -241,22 +241,22 @@
         function Popup() {}
 
         Popup.prototype.initRatingModal = function (uuidCustomer) {
-            const rootElement = document.getElementById("root");
+            const rootElement = document.getElementById('root');
             let point;
             let reviewContent;
             if (rootElement) {
-                rootElement.insertAdjacentHTML("afterbegin", initRating);
+                rootElement.insertAdjacentHTML('afterbegin', initRating);
             } else {
-                document.body.insertAdjacentHTML("afterbegin", initRating);
+                document.body.insertAdjacentHTML('afterbegin', initRating);
             }
             const radios = document.querySelectorAll(
                 'input[type=radio][name="rating"]'
             );
-            const reviewValue = document.getElementById("reviewComments");
-            const form = document.getElementById("review-form");
-            const modal = document.getElementById("ratingModal");
-            const closeButton = document.getElementById("closeRatingButton");
-            const ratingButton = document.getElementById("ratingButton");
+            const reviewValue = document.getElementById('reviewComments');
+            const form = document.getElementById('review-form');
+            const modal = document.getElementById('ratingModal');
+            const closeButton = document.getElementById('closeRatingButton');
+            const ratingButton = document.getElementById('ratingButton');
 
             function changeHandler(event) {
                 point = this.value;
@@ -266,10 +266,10 @@
                 reviewContent = this.value;
             }
 
-            reviewValue.addEventListener("change", changeHandlerComment);
+            reviewValue.addEventListener('change', changeHandlerComment);
 
             Array.prototype.forEach.call(radios, function (radio) {
-                radio.addEventListener("change", changeHandler);
+                radio.addEventListener('change', changeHandler);
             });
 
             closeButton.onclick = function () {
@@ -281,35 +281,35 @@
                 }
                 modal.remove();
             };
-            modal.style.display = "block";
+            modal.style.display = 'block';
         };
 
         Popup.prototype.openMsgModal = function (type, message) {
             try {
-                const rootElement = document.getElementById("root");
+                const rootElement = document.getElementById('root');
                 if (rootElement) {
-                    rootElement.insertAdjacentHTML("afterbegin", msgModal);
+                    rootElement.insertAdjacentHTML('afterbegin', msgModal);
                 } else {
-                    document.body.insertAdjacentHTML("afterbegin", msgModal);
+                    document.body.insertAdjacentHTML('afterbegin', msgModal);
                 }
 
-                const msg = document.getElementById("errMsg");
+                const msg = document.getElementById('errMsg');
 
-                const iconMsg = document.getElementById("iconMsg");
+                const iconMsg = document.getElementById('iconMsg');
 
-                if (type === "error" && iconMsg) {
-                    iconMsg.className = "fas fa-exclamation-circle";
-                    iconMsg.style.color = "red";
+                if (type === 'error' && iconMsg) {
+                    iconMsg.className = 'fas fa-exclamation-circle';
+                    iconMsg.style.color = 'red';
                 } else {
-                    iconMsg.className = "fas fa-check-circle";
-                    iconMsg.style.color = "green";
+                    iconMsg.className = 'fas fa-check-circle';
+                    iconMsg.style.color = 'green';
                 }
 
-                msg.innerText = message ? message : "";
-                const close = document.getElementById("closeBtn");
-                const modalMSG = document.getElementById("msgModal");
+                msg.innerText = message ? message : '';
+                const close = document.getElementById('closeBtn');
+                const modalMSG = document.getElementById('msgModal');
 
-                modalMSG.style.display = "block";
+                modalMSG.style.display = 'block';
                 close.onclick = function () {
                     modalMSG.remove();
                 };
@@ -334,19 +334,19 @@
                     await this.getAuthen();
                 }
                 const response = await fetch(this.url, {
-                    method: "POST",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
                     headers: {
-                        "Content-Type": "application/json;charset=UTF-8",
-                        "Token-id": this.config.token_id,
-                        "Token-key": this.config.token_key,
-                        "mac-address": "WEB-001",
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'Token-id': this.config.token_id,
+                        'Token-key': this.config.token_key,
+                        'mac-address': 'WEB-001',
                         Authorization: token,
                     },
-                    redirect: "follow",
-                    referrerPolicy: "no-referrer",
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
                     body: JSON.stringify(this.body),
                 });
                 if (response.ok) {
@@ -355,12 +355,12 @@
                 const error = await response.text();
                 throw JSON.parse(error);
             } catch (error) {
-                if (error && error.error === "invalid_token") {
+                if (error && error.error === 'invalid_token') {
                     await this.getAuthen();
                     return this.post();
                 }
                 console.log(error);
-                handleMsg(error, error.message, null, "error");
+                handleMsg(error, error.message, null, 'error');
                 return error;
             }
         };
@@ -371,19 +371,19 @@
                     await this.getAuthen();
                 }
                 const response = await fetch(this.url, {
-                    method: "GET",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
                     headers: {
-                        "Content-Type": "application/json;charset=UTF-8",
-                        "Token-id": this.config.token_id,
-                        "Token-key": this.config.token_key,
-                        "mac-address": "WEB-001",
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'Token-id': this.config.token_id,
+                        'Token-key': this.config.token_key,
+                        'mac-address': 'WEB-001',
                         Authorization: token,
                     },
-                    redirect: "follow",
-                    referrerPolicy: "no-referrer",
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
                 });
                 if (response.ok) {
                     return response.json();
@@ -391,11 +391,11 @@
                 const error = await response.text();
                 throw JSON.parse(error);
             } catch (error) {
-                if (error && error.error === "invalid_token") {
+                if (error && error.error === 'invalid_token') {
                     await this.getAuthen();
                     return this.get();
                 }
-                handleMsg(error, error.message, null, "error");
+                handleMsg(error, error.message, null, 'error');
                 return error;
             }
         };
@@ -406,19 +406,19 @@
                     await this.getAuthen();
                 }
                 const response = await fetch(this.url, {
-                    method: "DELETE",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
+                    method: 'DELETE',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
                     headers: {
-                        "Content-Type": "application/json;charset=UTF-8",
-                        "Token-id": this.config.token_id,
-                        "Token-key": this.config.token_key,
-                        "mac-address": "WEB-001",
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'Token-id': this.config.token_id,
+                        'Token-key': this.config.token_key,
+                        'mac-address': 'WEB-001',
                         Authorization: token,
                     },
-                    redirect: "follow",
-                    referrerPolicy: "no-referrer",
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
                     body: JSON.stringify(this.body),
                 });
                 if (response.ok) {
@@ -427,11 +427,11 @@
                 const error = await response.text();
                 throw JSON.parse(error);
             } catch (error) {
-                if (error && error.error === "invalid_token") {
+                if (error && error.error === 'invalid_token') {
                     await this.getAuthen();
                     return this.delete();
                 }
-                handleMsg(error, error.message, null, "error");
+                handleMsg(error, error.message, null, 'error');
                 return error;
             }
         };
@@ -443,15 +443,15 @@
         ) {
             try {
                 const response = await fetch(url, {
-                    method: "POST",
-                    mode: "cors",
-                    cache: "no-cache",
-                    credentials: "same-origin",
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                     },
-                    redirect: "follow",
-                    referrerPolicy: "no-referrer",
+                    redirect: 'follow',
+                    referrerPolicy: 'no-referrer',
                     body: JSON.stringify(param),
                 });
                 return response.json();
@@ -464,15 +464,15 @@
             const param = {
                 client_id: this.config.client_id,
                 client_secret: this.config.client_secret,
-                grant_type: "client_credentials",
+                grant_type: 'client_credentials',
             };
             const res = await this.postDataForAuthentication(
-                dev_url + "auth-service/oauth/token",
+                dev_url + 'auth-service/oauth/token',
                 param,
                 this.config
             );
             if (res.access_token) {
-                token = "Bearer " + res.access_token;
+                token = 'Bearer ' + res.access_token;
             }
             return res.access_token;
         };
@@ -495,8 +495,8 @@
             this.windowCall = null;
             this.pageShow = false;
             this.url = url;
-            this.status = "DISCONNECTED";
             this.api = null;
+            this.roomInfo = null;
         }
 
         VideoCall.prototype.registerDevice = async function (
@@ -506,7 +506,7 @@
             const body = {
                 deviceId: getUUID(),
                 deviceToken: uuidCustomer,
-                deviceTypeId: "WEB",
+                deviceTypeId: 'WEB',
                 idgTokenId: this.config.token_id,
                 lastDate: new Date(),
                 personIdApp: uuidCustomer,
@@ -514,7 +514,7 @@
                 topicUsing: this.getTopicUsing(uuidCustomer),
             };
             return await new Fetch(
-                API_ROUTER + "v2/register-device",
+                API_ROUTER + 'v2/register-device',
                 body,
                 this.config
             ).post();
@@ -527,9 +527,6 @@
             additionalData
         ) {
             try {
-                if (this.status === DISCONNECTED) {
-                    throw "Chưa kết nối socket, vui lòng thử lại sau!";
-                }
                 const body = {
                     callerId: callerId,
                     callerName: callerName,
@@ -539,11 +536,11 @@
                     additionalData: additionalData,
                 };
                 const res = await new Fetch(
-                    API_ROUTER + "v2/create-call",
+                    API_ROUTER + 'v2/create-call',
                     body,
                     this.config
                 ).post();
-                if (res.message === "IDG-00000000") {
+                if (res.message === 'IDG-00000000') {
                     setItem(ROOM_INFO, {
                         roomId: res.object.roomId,
                         token: res.object.token,
@@ -560,9 +557,9 @@
                 return res;
             } catch (e) {
                 if (e) {
-                    handleMsg("", "", e, "error");
+                    handleMsg('', '', e, 'error');
                 } else {
-                    handleMsg("", "", "Đã có lỗi xảy ra", "error");
+                    handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
                 }
                 return e;
             }
@@ -578,11 +575,11 @@
                     roomId: roomInfo.roomId,
                 };
                 const res = await new Fetch(
-                    API_ROUTER + "v2/accept-call",
+                    API_ROUTER + 'v2/accept-call',
                     paramv2,
                     this.config
                 ).post();
-                if (res.message === "IDG-00000000") {
+                if (res.message === 'IDG-00000000') {
                     if (this.url) {
                         this.openWindowCall(callerId);
                     }
@@ -591,14 +588,14 @@
                 return res;
             } catch (e) {
                 console.log(e);
-                handleMsg("", "", "Đã có lỗi xảy ra", "error");
+                handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
             }
         };
 
         VideoCall.prototype.endCall = async function (callerId) {
             hideModal();
             stopTimeout();
-            this.removeIframe();
+            // this.removeIframe();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
             let res;
             if (roomInfo) {
@@ -609,7 +606,7 @@
                     roomId: roomInfo.roomId,
                 };
                 res = await new Fetch(
-                    API_ROUTER + "v2/end-call",
+                    API_ROUTER + 'v2/end-call',
                     param,
                     this.config
                 ).post();
@@ -627,7 +624,7 @@
                 roomId: roomInfo.roomId,
             };
             return await new Fetch(
-                API_ROUTER + "v2/reject-call",
+                API_ROUTER + 'v2/reject-call',
                 paramv2,
                 this.config
             ).post();
@@ -641,7 +638,7 @@
                 roomId: roomInfo.roomId,
             };
             return await new Fetch(
-                API_ROUTER + "v2/remove-call",
+                API_ROUTER + 'v2/remove-call',
                 param,
                 this.config
             ).post();
@@ -652,11 +649,11 @@
                 deviceId: getUUID(),
                 idgTokenId: this.config.token_id,
                 personIdApp: personIdApp,
-                deviceTypeId: "WEB",
+                deviceTypeId: 'WEB',
             };
             localStorage.removeItem(ROOM_INFO);
             return await new Fetch(
-                API_ROUTER + "v2/remove-device",
+                API_ROUTER + 'v2/remove-device',
                 param,
                 this.config
             ).delete();
@@ -667,13 +664,13 @@
                 const roomInfo = JSON.parse(getItem(ROOM_INFO));
                 const roomId = id ? id : roomInfo.roomId;
                 return await new Fetch(
-                    API_ROUTER + "v2/external/get-file?roomId=" + roomId,
-                    "",
+                    API_ROUTER + 'v2/external/get-file?roomId=' + roomId,
+                    '',
                     this.config
                 ).get();
             } catch (e) {
                 console.log(e);
-                handleMsg("", "", "Đã có lỗi xảy ra", "error");
+                handleMsg('', '', 'Đã có lỗi xảy ra', 'error');
             }
         };
 
@@ -694,7 +691,7 @@
                     roomId: roomInfo.roomId,
                 };
                 res = await new Fetch(
-                    API_ROUTER + "v2/external/rating",
+                    API_ROUTER + 'v2/external/rating',
                     param,
                     this.config
                 ).post();
@@ -705,7 +702,7 @@
         VideoCall.prototype.setTimeoutEndcall = function (callerId) {
             var _this = this;
             timeout = setTimeout(function () {
-                console.log("The call is timeout");
+                console.log('The call is timeout');
                 _this.endCall(callerId);
                 _this.windowCall && _this.windowCall.close();
             }, 70000);
@@ -741,15 +738,15 @@
 
                 this.windowCall = window.open(
                     this.url,
-                    "videocall",
+                    'videocall',
                     `width=1280,height=600,top=${top},left=${left},menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yesnp`
                 );
-                window.addEventListener("offline", function () {
+                window.addEventListener('offline', function () {
                     _this.windowCall.close();
                 });
 
                 if (!this.windowCall) {
-                    throw "404-window";
+                    throw '404-window';
                 }
                 this.windowCall.onpageshow = (event) => {
                     this.pageShow = true;
@@ -762,12 +759,12 @@
                     }
                 };
             } catch (e) {
-                if (e === "404-window") {
+                if (e === '404-window') {
                     handleMsg(
-                        "",
-                        "",
-                        "Vui lòng cho phép Pop-ups bật để thực hiện cuộc gọi ",
-                        ""
+                        '',
+                        '',
+                        'Vui lòng cho phép Pop-ups bật để thực hiện cuộc gọi ',
+                        ''
                     );
                     this.endCall(callerId);
                 }
@@ -778,13 +775,18 @@
             uuidCustomer,
             message
         ) {
-            switch (message["title"]) {
+            switch (message['title']) {
                 case ACCEPTED:
-                    console.log("ACCEPTED");
+                    console.log('ACCEPTED');
                     stopTimeout();
                     return;
                 case PENDING:
-                    console.log("PENDING");
+                    console.log('PENDING');
+                    this.roomInfo = {
+                        roomId: message.roomId,
+                        token: message.token,
+                        domain: message.domain,
+                    };
                     setItem(ROOM_INFO, {
                         roomId: message.roomId,
                         token: message.token,
@@ -794,29 +796,29 @@
                     // this.setTimeoutEndcall(uuidCustomer);
                     return;
                 case REJECTED:
-                    console.log("REJECTED");
+                    console.log('REJECTED');
                     stopTimeout();
-                    this.removeIframe();
-                    handleMsg("", "", "Cuộc gọi đã bị từ chối!", "");
+                    // this.removeIframe();
+                    handleMsg('', '', 'Cuộc gọi đã bị từ chối!', '');
                     this.windowCall && this.windowCall.close();
                     hideModal();
                     return;
                 case DENIED:
-                    console.log("DENIED");
+                    console.log('DENIED');
                     hideModal();
                     return;
                 case FINISHED:
-                    console.log("FINISHED");
+                    console.log('FINISHED');
                     stopTimeout();
-                    handleMsg("", "", "Cuộc gọi đã kết thúc!", "");
+                    handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
                     this.windowCall && this.windowCall.close();
-                    this.removeIframe();
+                    // this.removeIframe();
                     hideModal();
                     return;
                 case TIMEOUT:
-                    console.log("timeout");
+                    console.log('timeout');
                     this.windowCall && this.windowCall.close();
-                    this.removeIframe();
+                    // this.removeIframe();
                     hideModal();
                     return;
                 default:
@@ -835,7 +837,7 @@
                 let mysubid = this.getTopicUsing(uuidCustomer);
 
                 connectionSocket.subscribe(
-                    "/topic/" + mysubid,
+                    '/topic/' + mysubid,
                     function (sdkEvent) {
                         const mess = JSON.parse(JSON.stringify(sdkEvent.body));
                         const messParse = JSON.parse(mess);
@@ -876,8 +878,8 @@
                     this.config
                 ).getAuthen();
                 let webSocketEndPoint = `wss://${dev_url.replace(
-                    "https://",
-                    ""
+                    'https://',
+                    ''
                 )}router-service/websocket?access_token=${access_token}`;
                 let ws = new WebSocket(webSocketEndPoint);
                 stompClient = StompJS.over(ws);
@@ -886,24 +888,22 @@
                     {},
                     function (frame) {
                         if (successCallback) {
-                            successCallback(frame.command);
+                            successCallback(frame.command, stompClient);
                         }
-                        _this.status = CONNECTED;
                     },
                     (error) => {
                         if (
                             error &&
                             Object.prototype.toString.call(error) ===
-                                "[object String]" &&
+                                '[object String]' &&
                             error.lastIndexOf(
-                                "Whoops! Lost connection to",
+                                'Whoops! Lost connection to',
                                 0
                             ) === 0
                         ) {
                             if (successCallback) {
-                                successCallback(DISCONNECTED);
+                                successCallback(DISCONNECTED, stompClient);
                             }
-                            this.status = DISCONNECTED;
                             setTimeout(() => {
                                 this.initConnection(StompJS, successCallback);
                             }, 3000);
@@ -924,7 +924,7 @@
         };
 
         VideoCall.prototype.removeIframe = function () {
-            const meetNode = document.querySelector("#meet");
+            const meetNode = document.querySelector('#meet');
             if (meetNode && !this.url) {
                 while (meetNode.firstChild) {
                     meetNode.removeChild(meetNode.firstChild);
@@ -939,28 +939,28 @@
             height
         ) {
             try {
-                let roomInfo = JSON.parse(localStorage.getItem("roomInfo"));
-                const meetNode = document.querySelector("#meet");
-                this.removeIframe();
+                let roomInfo = JSON.parse(localStorage.getItem('roomInfo'));
+                const meetNode = document.querySelector('#meet');
+                // this.removeIframe();
                 const options = {
-                    roomName: roomInfo["roomId"] ? roomInfo["roomId"] : "",
+                    roomName: roomInfo['roomId'] ? roomInfo['roomId'] : '',
                     width: width,
                     height: height,
-                    jwt: roomInfo["token"],
-                    configOverwrite: { subject: " " },
+                    jwt: roomInfo['token'],
+                    configOverwrite: { subject: ' ' },
                     userInfo: {
-                        displayName: roomInfo["caller"],
+                        displayName: roomInfo['caller'],
                         email: getUUID(),
                     },
-                    parentNode: document.querySelector("#meet"),
+                    parentNode: document.querySelector('#meet'),
                 };
                 this.api = new JitsiMeetExternalAPI(
-                    roomInfo["domain"].replace("https://", ""),
+                    roomInfo['domain'].replace('https://', ''),
                     options
                 );
-                this.api.addEventListener("readyToClose", async () => {
-                    await this.endCall(uuidCustomer);
-                    window.open("", "_self").close();
+                this.api.addEventListener('readyToClose', async () => {
+                    // await this.endCall(uuidCustomer);
+                    window.open('', '_self').close();
                 });
                 return this.api;
             } catch (e) {
@@ -969,7 +969,7 @@
         };
 
         VideoCall.prototype.getTopicUsing = function (customerId) {
-            return this.config.token_id + "_" + customerId + "_" + getUUID();
+            return this.config.token_id + '_' + customerId + '_' + getUUID();
         };
 
         VideoCall.prototype.createUUID = function () {
@@ -993,27 +993,27 @@
             console.log(this.windowCall);
             const iframe = this.api.getIFrame();
             const data = {
-                id: "capture",
+                id: 'capture',
             };
-            console.log("capture", data);
-            iframe.contentWindow.postMessage(data, "*");
+            console.log('capture', data);
+            iframe.contentWindow.postMessage(data, '*');
         };
 
         VideoCall.prototype.initReceivingModal = function (uuidUser) {
-            const rootElement = document.getElementById("root");
+            const rootElement = document.getElementById('root');
             var _this = this;
             if (rootElement) {
-                rootElement.insertAdjacentHTML("afterbegin", receivingCalling);
+                rootElement.insertAdjacentHTML('afterbegin', receivingCalling);
             } else {
                 document.body.insertAdjacentHTML(
-                    "afterbegin",
+                    'afterbegin',
                     receivingCalling
                 );
             }
 
-            const receiving = document.getElementById("receivingCalling");
-            const accept = document.getElementById("acceptCall");
-            const rejectBtn = document.getElementById("rejectCall");
+            const receiving = document.getElementById('receivingCalling');
+            const accept = document.getElementById('acceptCall');
+            const rejectBtn = document.getElementById('rejectCall');
 
             accept.onclick = function () {
                 _this.acceptCall(uuidUser);
@@ -1023,12 +1023,12 @@
                 _this.rejectCall(uuidUser);
                 receiving.remove();
             };
-            receiving.style.display = "block";
+            receiving.style.display = 'block';
         };
 
         hideModal = function () {
-            const callingModal = document.getElementById("myModal");
-            const receivingModal = document.getElementById("receivingCalling");
+            const callingModal = document.getElementById('myModal');
+            const receivingModal = document.getElementById('receivingCalling');
             if (callingModal) {
                 callingModal.remove();
             }
@@ -1038,7 +1038,7 @@
         };
 
         hideNoti = function () {
-            const modalMSG = document.getElementById("msgModal");
+            const modalMSG = document.getElementById('msgModal');
             if (modalMSG) {
                 modalMSG.remove();
             }
@@ -1051,10 +1051,10 @@
 
         getUUID = function () {
             try {
-                return getItem(UUID) && getItem(UUID).replace(/"/g, "");
+                return getItem(UUID) && getItem(UUID).replace(/"/g, '');
             } catch (e) {
                 console.log(e);
-                handleMsg("", "", "Lỗi không xác định", "error");
+                handleMsg('', '', 'Lỗi không xác định', 'error');
             }
         };
 
@@ -1083,11 +1083,11 @@
             } else if (res.error && res.message && !errorCode[res.message]) {
                 new Popup().openMsgModal(
                     type,
-                    "Lỗi không xác định! Vui lòng thử lại"
+                    'Lỗi không xác định! Vui lòng thử lại'
                 );
             } else if (message) {
                 new Popup().openMsgModal(type, message);
-            } else if (res.message === "IDG-00000000") {
+            } else if (res.message === 'IDG-00000000') {
                 new Popup().openMsgModal(type, errorCode[res.message]);
             }
         } catch (e) {
@@ -1101,11 +1101,11 @@
         },
     };
 
-    if (typeof exports !== "undefined" && exports !== null) {
+    if (typeof exports !== 'undefined' && exports !== null) {
         exports.VideoCallSDK = VideoCallSDK;
     }
 
-    if (typeof window !== "undefined" && window !== null) {
+    if (typeof window !== 'undefined' && window !== null) {
         window.VideoCallSDK = VideoCallSDK;
     } else if (!exports) {
         self.VideoCallSDK = VideoCallSDK;

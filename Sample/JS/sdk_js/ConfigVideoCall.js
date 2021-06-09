@@ -13,11 +13,3 @@ const ConfigVideoCall = {
 //     client_id: 'd2yHubLupMr2aTksJosFY3c5WtaF4xbaf8QDlD2U',
 //     client_secret: 'HN44EAm8JJOVdK8Je1cLZdgSqnEJsjYYa0ZDkSX9',
 // };
-
-// const ConfigVideoCall = {
-//     token_id: 'c17a7b3a-3d5b-2b05-e053-604fc10abbdb',
-//     token_key:
-//         'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKYWb8Oc3UZ6R9pL6AZMIoiWh2yiA4lzrdR1ziiFH90xeHFYwHL1hSp9vhfaFVnxjxl8pQ25MQjZOsNI3HNgso0CAwEAAQ==',
-//     client_id: 'pvPmhuIUyZg6gxUVWYBZh84m2AEow8fgMMGFEXDQ',
-//     client_secret: 'ptAuQGVvjROuq4RqYuD1dMw6keHBnPsY790qSfux',
-// };
