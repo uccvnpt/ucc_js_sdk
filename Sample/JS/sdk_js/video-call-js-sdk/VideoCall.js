@@ -359,7 +359,7 @@
                     await this.getAuthen();
                     return this.get();
                 }
-                handleMsg(error, error.message, null, 'error');
+                // handleMsg(error, error.message, null, 'error');
                 return error;
             }
         };
@@ -491,13 +491,9 @@
             additionalData
         ) {
             try {
-                if (this.getOS() === 'iOS' || this.getOS() === 'Android') {
-                    throw 'Tính năng Video Call trên web chỉ hỗ trợ trên trình duyệt của desktop';
-                }
                 if (this.status === DISCONNECTED) {
                     throw 'Chưa kết nối socket, vui lòng thử lại sau!';
                 }
-
                 const body = {
                     callerId: callerId,
                     callerName: callerName,
@@ -566,7 +562,7 @@
         VideoCall.prototype.endCall = async function (callerId) {
             hideModal();
             stopTimeout();
-            this.removeIframe();
+            // this.removeIframe();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
             let res;
             if (roomInfo) {
@@ -758,16 +754,17 @@
                         token: message.token,
                         domain: message.domain,
                     });
-                    new Popup(this.config).initReceivingModal(
-                        uuidCustomer,
-                        message
-                    );
+                    // let src =
+                    //     'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3';
+                    // let audio = new Audio(src);
+                    // audio.play();
+                    new Popup().initReceivingModal(uuidCustomer, message);
                     // this.setTimeoutEndcall(uuidCustomer);
                     return;
                 case REJECTED:
                     console.log('REJECTED');
                     stopTimeout();
-                    this.removeIframe();
+                    // this.removeIframe();
                     handleMsg('', '', 'Cuộc gọi đã bị từ chối!', '');
                     this.windowCall && this.windowCall.close();
                     hideModal();
@@ -781,13 +778,13 @@
                     stopTimeout();
                     handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
                     this.windowCall && this.windowCall.close();
-                    this.removeIframe();
+                    // this.removeIframe();
                     hideModal();
                     return;
                 case TIMEOUT:
                     console.log('timeout');
                     this.windowCall && this.windowCall.close();
-                    this.removeIframe();
+                    // this.removeIframe();
                     hideModal();
                     return;
                 default:
@@ -896,7 +893,7 @@
 
         VideoCall.prototype.removeIframe = function () {
             const meetNode = document.querySelector('#meet');
-            if (meetNode) {
+            if (meetNode && !this.url) {
                 while (meetNode.firstChild) {
                     meetNode.removeChild(meetNode.firstChild);
                 }
@@ -912,7 +909,7 @@
             try {
                 let roomInfo = JSON.parse(localStorage.getItem('roomInfo'));
                 const meetNode = document.querySelector('#meet');
-                this.removeIframe();
+                // this.removeIframe();
                 const options = {
                     roomName: roomInfo['roomId'] ? roomInfo['roomId'] : '',
                     width: width,
@@ -968,29 +965,6 @@
             };
             console.log('capture', data);
             iframe.contentWindow.postMessage(data, '*');
-        };
-
-        VideoCall.prototype.getOS = function () {
-            var userAgent = window.navigator.userAgent,
-                platform = window.navigator.platform,
-                macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
-                windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
-                iosPlatforms = ['iPhone', 'iPad', 'iPod'],
-                os = null;
-
-            if (macosPlatforms.indexOf(platform) !== -1) {
-                os = 'Mac OS';
-            } else if (iosPlatforms.indexOf(platform) !== -1) {
-                os = 'iOS';
-            } else if (windowsPlatforms.indexOf(platform) !== -1) {
-                os = 'Windows';
-            } else if (/Android/.test(userAgent)) {
-                os = 'Android';
-            } else if (!os && /Linux/.test(platform)) {
-                os = 'Linux';
-            }
-
-            return os;
         };
 
         hideModal = function () {
