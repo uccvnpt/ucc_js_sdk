@@ -15,11 +15,9 @@
         <div id="meet" style="height: 100vh"></div>
         <script>
             //init config cho sdk
-            const ccbs = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
-            //chú ý 2 bộ config khác nhau
-            const smcs = VideoCallSDK.initConfig('call.html', ConfigVideoCall2);
+            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
 
-            smcs.initVideoCall(
+            video.initVideoCall(
                 window.JitsiMeetExternalAPI,
                 localStorage.getItem('uuidAdmin').replace(/"/g, ''),
                 '100%',
@@ -28,7 +26,7 @@
 
             //lưu ý hàm này chỉ trả về chuỗi base64 khi không phải là file lo
             function capture() {
-                ccbs.capture((base64) => {
+                video.capture((base64) => {
                     console.log(base64);
                 });
             }

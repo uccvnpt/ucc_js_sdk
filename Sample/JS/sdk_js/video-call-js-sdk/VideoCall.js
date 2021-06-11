@@ -487,8 +487,11 @@
             stompClient,
             hideModal,
             hideNoti,
-            stopTimeout;
+            stopTimeout,
+            startRingtone,
+            stopRingtone;
         let timeout = null;
+        let audio = null;
 
         function VideoCall(url, config) {
             this.config = config;
@@ -574,6 +577,7 @@
 
         VideoCall.prototype.acceptCall = async function (callerId) {
             try {
+                stopRingtone();
                 hideModal();
                 // const roomInfo = JSON.parse(getItem(ROOM_INFO));
                 const paramv2 = {
@@ -603,8 +607,6 @@
         VideoCall.prototype.endCall = async function (callerId) {
             hideModal();
             stopTimeout();
-            // this.removeIframe();
-            // const roomInfo = JSON.parse(getItem(ROOM_INFO));
             let res;
             if (this.roomInfo) {
                 const param = {
@@ -624,6 +626,7 @@
 
         VideoCall.prototype.rejectCall = async function (callerId) {
             stopTimeout();
+            stopRingtone();
             // hideModal();
             let res;
             // const roomInfo = JSON.parse(getItem(ROOM_INFO));
@@ -824,6 +827,7 @@
                     return;
                 case PENDING:
                     console.log('PENDING');
+                    startRingtone();
                     this.roomInfo = {
                         roomId: message.roomId,
                         token: message.token,
@@ -836,12 +840,10 @@
                     });
                     hideModal();
                     this.initReceivingModal(uuidCustomer);
-                    // this.setTimeoutEndcall(uuidCustomer);
                     return;
                 case REJECTED:
                     console.log('REJECTED');
                     stopTimeout();
-                    // this.removeIframe();
                     handleMsg(
                         '',
                         '',
@@ -859,14 +861,14 @@
                     console.log('FINISHED');
                     stopTimeout();
                     handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
+                    stopRingtone();
                     this.windowCall && this.windowCall.close();
-                    // this.removeIframe();
                     hideModal();
                     return;
                 case TIMEOUT:
                     console.log('timeout');
+                    stopRingtone();
                     this.windowCall && this.windowCall.close();
-                    // this.removeIframe();
                     hideModal();
                     return;
                 default:
@@ -988,8 +990,6 @@
         ) {
             try {
                 let roomInfo = JSON.parse(localStorage.getItem('roomInfo'));
-                // const meetNode = document.querySelector('#meet');
-                // this.removeIframe();
                 const options = {
                     roomName: roomInfo['roomId'] ? roomInfo['roomId'] : '',
                     width: width,
@@ -1089,6 +1089,26 @@
             const modalMSG = document.getElementById('msgModal');
             if (modalMSG) {
                 modalMSG.remove();
+            }
+        };
+
+        startRingtone = function () {
+            let src = 'https://ucc.vnpt.vn/assets/js/old_telephone.wav';
+            audio = new Audio(src);
+            audio.loop = true;
+            audio.play();
+            setTimeout(() => {
+                if (audio) {
+                    audio.pause();
+                }
+            }, 70000);
+        };
+
+        stopRingtone = function () {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                audio = null;
             }
         };
 
