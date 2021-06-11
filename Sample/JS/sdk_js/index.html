@@ -41,7 +41,9 @@
         ></script>
     </head>
     <body>
-        <script src="video-call-js-sdk/VideoCall.js"></script>
+        <!-- <script src="video-call-js-sdk/VideoCall.js"></script> -->
+        <script src="https://ucc.vnpt.vn/assets/js/VideoCall.min.js"></script>
+        <!-- <script src="http://localhost:4200/assets/js/VideoCall.js"></script> -->
         <script type="text/javascript" src="ConfigVideoCall.js"></script>
         <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
         <div>
@@ -179,9 +181,6 @@
                 },
                 (event) => {
                     console.log(event);
-                    let src = 'old_telephone.wav';
-                    let audio = new Audio(src);
-                    audio.play();
                 },
                 true
             );

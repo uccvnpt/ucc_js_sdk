@@ -451,8 +451,11 @@
             stompClient,
             hideModal,
             hideNoti,
-            stopTimeout;
+            stopTimeout,
+            startRingtone,
+            stopRingtone;
         let timeout = null;
+        let audio = null;
 
         function VideoCall(url, config) {
             this.config = config;
@@ -583,6 +586,7 @@
 
         VideoCall.prototype.rejectCall = async function (callerId) {
             stopTimeout();
+            stopRingtone();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
             const paramv2 = {
                 callerId: callerId,
@@ -745,6 +749,7 @@
             switch (message['title']) {
                 case ACCEPTED:
                     console.log('ACCEPTED');
+                    stopRingtone();
                     stopTimeout();
                     return;
                 case PENDING:
@@ -754,10 +759,7 @@
                         token: message.token,
                         domain: message.domain,
                     });
-                    // let src =
-                    //     'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3';
-                    // let audio = new Audio(src);
-                    // audio.play();
+                    startRingtone();
                     new Popup().initReceivingModal(uuidCustomer, message);
                     // this.setTimeoutEndcall(uuidCustomer);
                     return;
@@ -776,14 +778,20 @@
                 case FINISHED:
                     console.log('FINISHED');
                     stopTimeout();
+                    stopRingtone();
                     handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
                     this.windowCall && this.windowCall.close();
                     // this.removeIframe();
+                    if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
                     hideModal();
                     return;
                 case TIMEOUT:
                     console.log('timeout');
                     this.windowCall && this.windowCall.close();
+                    stopRingtone();
                     // this.removeIframe();
                     hideModal();
                     return;
@@ -982,6 +990,26 @@
             const modalMSG = document.getElementById('msgModal');
             if (modalMSG) {
                 modalMSG.remove();
+            }
+        };
+
+        startRingtone = function () {
+            let src = 'old_telephone.wav';
+            audio = new Audio(src);
+            audio.loop = true;
+            audio.play();
+            console.log(audio);
+            setTimeout(() => {
+                if (audio) {
+                    audio.pause();
+                }
+            }, 70000);
+        };
+
+        stopRingtone = function () {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
             }
         };
 
