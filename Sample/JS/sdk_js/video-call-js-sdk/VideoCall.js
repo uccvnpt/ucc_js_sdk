@@ -500,6 +500,7 @@
             this.url = url;
             this.api = null;
             this.roomInfo = null;
+            this.subscription = null;
         }
 
         VideoCall.prototype.registerDevice = async function (
@@ -607,6 +608,7 @@
         VideoCall.prototype.endCall = async function (callerId) {
             hideModal();
             stopTimeout();
+
             let res;
             if (this.roomInfo) {
                 const param = {
@@ -628,6 +630,12 @@
             stopTimeout();
             stopRingtone();
             // hideModal();
+            const data = {
+                title: 'REJECTED',
+                token_id: this.config.token_id,
+            };
+            console.log('capture', data);
+            window.postMessage(data, '*');
             let res;
             // const roomInfo = JSON.parse(getItem(ROOM_INFO));
             if (this.roomInfo) {
@@ -886,7 +894,7 @@
                 let lastMessSocket = null;
                 let mysubid = this.getTopicUsing(uuidCustomer);
 
-                connectionSocket.subscribe(
+                this.subscription = connectionSocket.subscribe(
                     '/topic/' + mysubid,
                     function (sdkEvent) {
                         const mess = JSON.parse(JSON.stringify(sdkEvent.body));
@@ -968,8 +976,14 @@
         };
 
         VideoCall.prototype.disconnectSocket = function () {
-            if (stompClient !== null) {
+            if (stompClient) {
                 stompClient.disconnect();
+            }
+        };
+
+        VideoCall.prototype.unsubscribeSocket = function () {
+            if (this.subscription) {
+                this.subscription.unsubscribe();
             }
         };
 
