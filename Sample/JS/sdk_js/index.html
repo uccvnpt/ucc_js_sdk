@@ -41,8 +41,8 @@
         ></script>
     </head>
     <body>
-        <!-- <script src="video-call-js-sdk/VideoCall.js"></script> -->
-        <script src="https://ucc.vnpt.vn/assets/js/VideoCall.min.js"></script>
+        <script src="video-call-js-sdk/VideoCall.js"></script>
+        <!-- <script src="https://ucc.vnpt.vn/assets/js/VideoCall.min.js"></script> -->
         <!-- <script src="http://localhost:4200/assets/js/VideoCall.js"></script> -->
         <script type="text/javascript" src="ConfigVideoCall.js"></script>
         <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
@@ -226,12 +226,11 @@
                     localStorage.getItem('uuidUser').replace(/"/g, ''),
                 ];
                 const additionalData = {
-                    request_id: '123abc',
-                    userid: 'abc456',
+                    caller: '123abc',
                 };
                 const res = await video.createCall(
                     uuidAdmin,
-                    'admin',
+                    'Nguyễn Văn hằng hà sa số sương sa hột lựu',
                     receiverCallers,
                     additionalData
                 );

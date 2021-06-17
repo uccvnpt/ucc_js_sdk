@@ -22,7 +22,6 @@
     const LEAVE = 'LEAVE';
     const CONNECTED = 'CONNECTED';
     const DISCONNECTED = 'DISCONNECTED';
-
     const errorCode = {
         'IDG-00000000': 'Thành công! - IDG-00000000',
         'IDG-20000001': 'Not null! - IDG-20000001',
@@ -128,7 +127,7 @@
             `       <div class="modalContentSDK">` +
             `           <div class="modalBodySDK">` +
             `               <div class="col-12 mb-2 text-center">` +
-            `                   <span>Bạn có một cuộc gọi video từ admin hệ thống, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>` +
+            `                   <span id="mySpan">Bạn có một cuộc gọi video từ admin hệ thống, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>` +
             `               </div>` +
             `               <div class="row justify-content-center mx-2">` +
             `                   <button id="acceptCall" type="button" class="btnSDK btnOutlinePrimarySDK mr-2" > Đồng ý</button>` +
@@ -218,6 +217,9 @@
             const receiving = document.getElementById('receivingCalling');
             const accept = document.getElementById('acceptCall');
             const rejectBtn = document.getElementById('rejectCall');
+            document.getElementById(
+                'mySpan'
+            ).innerHTML = `Bạn có một cuộc gọi video từ ${data.publisher}, Bạn có muốn nhận cuộc gọi ngay lúc này?`;
 
             accept.onclick = function () {
                 if (video.status === CONNECTED) {
@@ -537,6 +539,7 @@
 
         VideoCall.prototype.acceptCall = async function (callerId) {
             try {
+                stopRingtone();
                 const roomInfo = JSON.parse(getItem(ROOM_INFO));
                 const paramv2 = {
                     callerId: callerId,
@@ -749,7 +752,6 @@
             switch (message['title']) {
                 case ACCEPTED:
                     console.log('ACCEPTED');
-                    stopRingtone();
                     stopTimeout();
                     return;
                 case PENDING:
@@ -994,11 +996,10 @@
         };
 
         startRingtone = function () {
-            let src = 'old_telephone.wav';
+            let src = 'https://ucc.vnpt.vn/assets/js/old_telephone.wav';
             audio = new Audio(src);
             audio.loop = true;
             audio.play();
-            console.log(audio);
             setTimeout(() => {
                 if (audio) {
                     audio.pause();
@@ -1010,6 +1011,7 @@
             if (audio) {
                 audio.pause();
                 audio.currentTime = 0;
+                audio = null;
             }
         };
 
