@@ -8,8 +8,8 @@
         token,
         video,
         returnImage;
-    const dev_url = 'https://api.idg.vnpt.vn/';
-    // const dev_url = 'https://explorer.idg.vnpt.vn/';
+    // const dev_url = 'https://api.idg.vnpt.vn/';
+    const dev_url = 'https://explorer.idg.vnpt.vn/';
     const API_ROUTER = dev_url + 'router-service/api/';
     const UUID = 'uuid';
     const ROOM_INFO = 'roomInfo';
@@ -453,9 +453,7 @@
             stompClient,
             hideModal,
             hideNoti,
-            stopTimeout,
-            startRingtone,
-            stopRingtone;
+            stopTimeout;
         let timeout = null;
         let audio = null;
 
@@ -481,9 +479,10 @@
                 personIdApp: uuidCustomer,
                 personName: personName,
                 topicUsing: this.getTopicUsing(uuidCustomer),
+                tokenIdApp: this.config.token_id_app,
             };
             return await new Fetch(
-                API_ROUTER + 'v2/register-device',
+                API_ROUTER + 'v3/register-device',
                 body,
                 this.config
             ).post();
@@ -492,7 +491,8 @@
         VideoCall.prototype.createCall = async function (
             callerId,
             callerName,
-            reciverCallers,
+            callerIdDest,
+            tokenIdAppDest,
             additionalData
         ) {
             try {
@@ -501,14 +501,16 @@
                 }
                 const body = {
                     callerId: callerId,
+                    callerIdDest: callerIdDest,
                     callerName: callerName,
                     deviceId: getUUID(),
                     idgTokenId: this.config.token_id,
-                    reciverCallers: reciverCallers,
+                    tokenIdAppDest: tokenIdAppDest,
+                    tokenIdAppSrc: this.config.token_id_app,
                     additionalData: additionalData,
                 };
                 const res = await new Fetch(
-                    API_ROUTER + 'v2/create-call',
+                    API_ROUTER + 'v3/create-call',
                     body,
                     this.config
                 ).post();
@@ -539,17 +541,18 @@
 
         VideoCall.prototype.acceptCall = async function (callerId) {
             try {
-                stopRingtone();
+                this.stopRingtone();
                 const roomInfo = JSON.parse(getItem(ROOM_INFO));
-                const paramv2 = {
+                const param = {
                     callerId: callerId,
                     deviceId: getUUID(),
                     idgTokenId: this.config.token_id,
                     roomId: roomInfo.roomId,
+                    tokenIdApp: this.config.token_id_app,
                 };
                 const res = await new Fetch(
-                    API_ROUTER + 'v2/accept-call',
-                    paramv2,
+                    API_ROUTER + 'v3/accept-call',
+                    param,
                     this.config
                 ).post();
                 if (res.message === 'IDG-00000000') {
@@ -568,7 +571,6 @@
         VideoCall.prototype.endCall = async function (callerId) {
             hideModal();
             stopTimeout();
-            // this.removeIframe();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
             let res;
             if (roomInfo) {
@@ -577,9 +579,10 @@
                     deviceId: getUUID(),
                     idgTokenId: this.config.token_id,
                     roomId: roomInfo.roomId,
+                    tokenIdApp: this.config.token_id_app,
                 };
                 res = await new Fetch(
-                    API_ROUTER + 'v2/end-call',
+                    API_ROUTER + 'v3/end-call',
                     param,
                     this.config
                 ).post();
@@ -589,17 +592,18 @@
 
         VideoCall.prototype.rejectCall = async function (callerId) {
             stopTimeout();
-            stopRingtone();
+            this.stopRingtone();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
-            const paramv2 = {
+            const param = {
                 callerId: callerId,
                 deviceId: getUUID(),
                 idgTokenId: this.config.token_id,
                 roomId: roomInfo.roomId,
+                tokenIdApp: this.config.token_id_app,
             };
             return await new Fetch(
-                API_ROUTER + 'v2/reject-call',
-                paramv2,
+                API_ROUTER + 'v3/reject-call',
+                param,
                 this.config
             ).post();
         };
@@ -761,7 +765,7 @@
                         token: message.token,
                         domain: message.domain,
                     });
-                    startRingtone();
+                    this.startRingtone();
                     new Popup().initReceivingModal(uuidCustomer, message);
                     // this.setTimeoutEndcall(uuidCustomer);
                     return;
@@ -780,7 +784,7 @@
                 case FINISHED:
                     console.log('FINISHED');
                     stopTimeout();
-                    stopRingtone();
+                    this.stopRingtone();
                     handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
                     this.windowCall && this.windowCall.close();
                     // this.removeIframe();
@@ -793,7 +797,7 @@
                 case TIMEOUT:
                     console.log('timeout');
                     this.windowCall && this.windowCall.close();
-                    stopRingtone();
+                    this.stopRingtone();
                     // this.removeIframe();
                     hideModal();
                     return;
@@ -947,7 +951,15 @@
         };
 
         VideoCall.prototype.getTopicUsing = function (customerId) {
-            return this.config.token_id + '_' + customerId + '_' + getUUID();
+            return (
+                this.config.token_id +
+                '_' +
+                this.config.token_id_app +
+                '_' +
+                customerId +
+                '_' +
+                getUUID()
+            );
         };
 
         VideoCall.prototype.createUUID = function () {
@@ -977,6 +989,26 @@
             iframe.contentWindow.postMessage(data, '*');
         };
 
+        VideoCall.prototype.startRingtone = function () {
+            let src = 'https://ucc.vnpt.vn/assets/js/old_telephone.wav';
+            audio = new Audio(src);
+            audio.loop = true;
+            audio.play();
+            setTimeout(() => {
+                if (audio) {
+                    audio.pause();
+                }
+            }, 70000);
+        };
+
+        VideoCall.prototype.stopRingtone = function () {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                audio = null;
+            }
+        };
+
         hideModal = function () {
             const callingModal = document.getElementById('myModal');
             const receivingModal = document.getElementById('receivingCalling');
@@ -992,26 +1024,6 @@
             const modalMSG = document.getElementById('msgModal');
             if (modalMSG) {
                 modalMSG.remove();
-            }
-        };
-
-        startRingtone = function () {
-            let src = 'https://ucc.vnpt.vn/assets/js/old_telephone.wav';
-            audio = new Audio(src);
-            audio.loop = true;
-            audio.play();
-            setTimeout(() => {
-                if (audio) {
-                    audio.pause();
-                }
-            }, 70000);
-        };
-
-        stopRingtone = function () {
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-                audio = null;
             }
         };
 

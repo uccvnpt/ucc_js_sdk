@@ -42,8 +42,6 @@
     </head>
     <body>
         <script src="video-call-js-sdk/VideoCall.js"></script>
-        <!-- <script src="https://ucc.vnpt.vn/assets/js/VideoCall.min.js"></script> -->
-        <!-- <script src="http://localhost:4200/assets/js/VideoCall.js"></script> -->
         <script type="text/javascript" src="ConfigVideoCall.js"></script>
         <link rel="stylesheet" href="video-call-js-sdk/style-caller.css" />
         <div>
@@ -222,16 +220,18 @@
 
             //gọi video
             async function callVideo() {
-                const receiverCallers = [
-                    localStorage.getItem('uuidUser').replace(/"/g, ''),
-                ];
+                const callerIdDest = localStorage
+                    .getItem('uuidUser')
+                    .replace(/"/g, '');
                 const additionalData = {
                     caller: '123abc',
                 };
+                const tokenIdAppDest = ConfigVideoCall.token_id_app;
                 const res = await video.createCall(
                     uuidAdmin,
-                    'Nguyễn Văn hằng hà sa số sương sa hột lựu',
-                    receiverCallers,
+                    'Nguyễn Văn Lâm',
+                    callerIdDest,
+                    tokenIdAppDest,
                     additionalData
                 );
                 console.log('call', res);
