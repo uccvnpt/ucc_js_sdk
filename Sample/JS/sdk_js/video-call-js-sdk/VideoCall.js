@@ -628,10 +628,11 @@
                 idgTokenId: this.config.token_id,
                 personIdApp: personIdApp,
                 deviceTypeId: 'WEB',
+                tokenIdApp: this.config.token_id_app,
             };
             localStorage.removeItem(ROOM_INFO);
             return await new Fetch(
-                API_ROUTER + 'v2/remove-device',
+                API_ROUTER + 'v3/remove-device',
                 param,
                 this.config
             ).delete();
