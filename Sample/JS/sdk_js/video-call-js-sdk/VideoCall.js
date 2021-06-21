@@ -8,8 +8,8 @@
         token,
         video,
         returnImage;
-    const dev_url = 'https://api.idg.vnpt.vn/';
-    // const dev_url = 'https://explorer.idg.vnpt.vn/';
+    // const dev_url = 'https://api.idg.vnpt.vn/';
+    const dev_url = 'https://explorer.idg.vnpt.vn/';
     const API_ROUTER = dev_url + 'router-service/api/';
     const UUID = 'uuid';
     const ROOM_INFO = 'roomInfo';
@@ -127,7 +127,7 @@
             `       <div class="modalContentSDK">` +
             `           <div class="modalBodySDK">` +
             `               <div class="col-12 mb-2 text-center">` +
-            `                   <span id="mySpan">Bạn có một cuộc gọi video từ admin hệ thống, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>` +
+            `                   <span>Bạn có một cuộc gọi video từ admin hệ thống, Bạn có muốn nhận cuộc gọi ngay lúc này?</span>` +
             `               </div>` +
             `               <div class="row justify-content-center mx-2">` +
             `                   <button id="acceptCall" type="button" class="btnSDK btnOutlinePrimarySDK mr-2" > Đồng ý</button>` +
@@ -217,9 +217,6 @@
             const receiving = document.getElementById('receivingCalling');
             const accept = document.getElementById('acceptCall');
             const rejectBtn = document.getElementById('rejectCall');
-            document.getElementById(
-                'mySpan'
-            ).innerHTML = `Bạn có một cuộc gọi video từ ${data.publisher}, Bạn có muốn nhận cuộc gọi ngay lúc này?`;
 
             accept.onclick = function () {
                 if (video.status === CONNECTED) {
@@ -756,6 +753,7 @@
                     return;
                 case PENDING:
                     console.log('PENDING');
+                    hideNoti();
                     setItem(ROOM_INFO, {
                         roomId: message.roomId,
                         token: message.token,
