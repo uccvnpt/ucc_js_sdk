@@ -8,13 +8,13 @@
 // };
 
 const ConfigVideoCall = {
-    token_id: 'be40e688-6d85-58c8-e053-6c1b9f0a4bdf',
+    token_id: 'c542f45d-b95d-5ae5-e053-6c1b9f0afb81',
     token_id_app: '01ebcf7e-1a5c-1080-82a1-10a45c074591',
     app_name: 'SMCS',
     token_key:
-        'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI4qY0j034A+rE3JGPKacrQWuPkN1xUiPqzzT4cgKo5ijAlPO5kowDa1N0aQvqf8POyAZwvrdAQBJOzO9E+NLwsCAwEAAQ==',
-    client_id: 'd2yHubLupMr2aTksJosFY3c5WtaF4xbaf8QDlD2U',
-    client_secret: 'HN44EAm8JJOVdK8Je1cLZdgSqnEJsjYYa0ZDkSX9',
+        'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIFeBLDrTFLImdsO/puFL53+jzHqf9R66BuEnAD+wurMavGLCF5BGfjA2kv2B3SmhCgU11Ke4+UWd4akY3dsZgsCAwEAAQ==',
+    client_id: '4IcYtqApSxeGWrTaEyjUzIHm4S57Ob4BLp1KeLdz',
+    client_secret: 'B9bQDZ8g9GYw2ji9bqNhsqUG9SeEc0NlNePPrM5q',
 };
 
 // const ConfigVideoCall = {

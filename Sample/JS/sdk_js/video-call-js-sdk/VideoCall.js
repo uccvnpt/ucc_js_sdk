@@ -761,6 +761,7 @@
                     return;
                 case PENDING:
                     console.log('PENDING');
+                    hideNoti();
                     setItem(ROOM_INFO, {
                         roomId: message.roomId,
                         token: message.token,
