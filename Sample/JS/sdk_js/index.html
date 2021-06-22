@@ -120,6 +120,24 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="row mb-2">
+                            <div class="col-8">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="tokenIdAppDest"
+                                />
+                            </div>
+                            <div class="col-4">
+                                <button
+                                    type="button"
+                                    class="btn btn-success"
+                                    onclick="setUUID('tokenIdAppDest')"
+                                >
+                                    Bước 4: Thiết lập token id app đích
+                                </button>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-8">
                                 <p class="pt-2" id="uuidUserText"></p>
@@ -130,7 +148,7 @@
                                     class="btn btn-success"
                                     onclick="callVideo()"
                                 >
-                                    Bước 4: Gọi tới user đích
+                                    Gọi tới user đích
                                 </button>
                             </div>
                         </div>
@@ -170,6 +188,9 @@
                 ? localStorage.getItem('uuidUser').replace(/"/g, '')
                 : video.createUUID();
 
+            const tokenIdAppDest = localStorage.getItem('tokenIdAppDest')
+                ? localStorage.getItem('tokenIdAppDest').replace(/"/g, '')
+                : '01ebcf7e-1a5c-1080-82a1-10a45c074591';
             // thực hiện connect tới socket
             video.initSocket(
                 Stomp,
@@ -186,6 +207,7 @@
             document.getElementById('uuidAdmin').value = uuidAdmin;
             document.getElementById('uuidUser').value = uuidUser;
             document.getElementById('uuidUserText').innerHTML = uuidUser;
+            document.getElementById('tokenIdAppDest').value = tokenIdAppDest;
 
             //hàm thực hiện xóa device khi logout
             function logout() {
@@ -200,17 +222,23 @@
                 const uuidAdminValue =
                     document.getElementById('uuidAdmin').value;
                 const uuidUserValue = document.getElementById('uuidUser').value;
+                const tokenIdAppDest =
+                    document.getElementById('tokenIdAppDest').value;
                 document.getElementById('uuidUserText').innerHTML =
                     uuidUserValue;
+                alert(type);
+                if (type === 'tokenIdAppDest') {
+                    localStorage.setItem(
+                        'tokenIdAppDest',
+                        JSON.stringify(tokenIdAppDest)
+                    );
+                }
                 if (type === 'admin') {
-                    alert(uuidAdminValue);
                     localStorage.setItem(
                         'uuidAdmin',
                         JSON.stringify(uuidAdminValue)
                     );
-                    alert(uuidAdminValue);
                 } else {
-                    alert(uuidUserValue);
                     localStorage.setItem(
                         'uuidUser',
                         JSON.stringify(uuidUserValue)
@@ -227,12 +255,12 @@
                     caller: 'smcs',
                 };
                 // const tokenIdAppDest = '01ebcf76-3fe5-1138-a649-19f835791b8b';
-                const tokenIdAppDest = '01ebcf7e-1a5c-1080-82a1-10a45c074591';
+                // const tokenIdAppDest = '01ebcf7e-1a5c-1080-82a1-10a45c074591';
                 const res = await video.createCall(
                     uuidAdmin,
                     'Nguyễn Văn Lâm',
                     callerIdDest,
-                    tokenIdAppDest,
+                    localStorage.getItem('tokenIdAppDest').replace(/"/g, ''),
                     additionalData
                 );
                 console.log('call', res);
