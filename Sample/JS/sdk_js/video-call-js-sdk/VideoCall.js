@@ -447,14 +447,7 @@
 
     // Video call sdk
     VideoCall = (function () {
-        let getUUID,
-            setItem,
-            getItem,
-            stompClient,
-            hideModal,
-            hideNoti,
-            stopTimeout;
-        let timeout = null;
+        let getUUID, setItem, getItem, stompClient, hideModal, hideNoti;
         let audio = null;
 
         function VideoCall(url, config) {
@@ -464,6 +457,7 @@
             this.url = url;
             this.status = 'DISCONNECTED';
             this.api = null;
+            this.timeout = null;
         }
 
         VideoCall.prototype.registerDevice = async function (
@@ -525,7 +519,7 @@
                     if (this.url) {
                         this.openWindowCall(callerId);
                     }
-                    // this.setTimeoutEndcall(callerId);
+                    this.setTimeoutEndcall(callerId);
                     return res;
                 }
                 return res;
@@ -570,7 +564,7 @@
 
         VideoCall.prototype.endCall = async function (callerId) {
             hideModal();
-            stopTimeout();
+            this.stopTimeout();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
             let res;
             if (roomInfo) {
@@ -591,7 +585,7 @@
         };
 
         VideoCall.prototype.rejectCall = async function (callerId) {
-            stopTimeout();
+            this.stopTimeout();
             this.stopRingtone();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
             const param = {
@@ -680,7 +674,11 @@
 
         VideoCall.prototype.setTimeoutEndcall = function (callerId) {
             var _this = this;
-            timeout = setTimeout(function () {
+            if (this.timeout) {
+                clearTimeout(this.timeout);
+                this.timeout = null;
+            }
+            this.timeout = setTimeout(function () {
                 console.log('The call is timeout');
                 _this.endCall(callerId);
                 _this.windowCall && _this.windowCall.close();
@@ -757,7 +755,7 @@
             switch (message['title']) {
                 case ACCEPTED:
                     console.log('ACCEPTED');
-                    stopTimeout();
+                    this.stopTimeout();
                     return;
                 case PENDING:
                     console.log('PENDING');
@@ -769,12 +767,11 @@
                     });
                     this.startRingtone();
                     new Popup().initReceivingModal(uuidCustomer, message);
-                    // this.setTimeoutEndcall(uuidCustomer);
+                    this.setTimeoutEndcall(uuidCustomer);
                     return;
                 case REJECTED:
                     console.log('REJECTED');
-                    stopTimeout();
-                    // this.removeIframe();
+                    this.stopTimeout();
                     handleMsg('', '', 'Cuộc gọi đã bị từ chối!', '');
                     this.windowCall && this.windowCall.close();
                     hideModal();
@@ -785,11 +782,10 @@
                     return;
                 case FINISHED:
                     console.log('FINISHED');
-                    stopTimeout();
+                    this.stopTimeout();
                     this.stopRingtone();
                     handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
                     this.windowCall && this.windowCall.close();
-                    // this.removeIframe();
                     if (audio) {
                         audio.pause();
                         audio.currentTime = 0;
@@ -800,7 +796,6 @@
                     console.log('timeout');
                     this.windowCall && this.windowCall.close();
                     this.stopRingtone();
-                    // this.removeIframe();
                     hideModal();
                     return;
                 default:
@@ -1011,6 +1006,11 @@
             }
         };
 
+        VideoCall.prototype.stopTimeout = function () {
+            clearTimeout(this.timeout);
+            this.timeout = null;
+        };
+
         hideModal = function () {
             const callingModal = document.getElementById('myModal');
             const receivingModal = document.getElementById('receivingCalling');
@@ -1027,11 +1027,6 @@
             if (modalMSG) {
                 modalMSG.remove();
             }
-        };
-
-        stopTimeout = function () {
-            clearTimeout(timeout);
-            timeout = null;
         };
 
         getUUID = function () {
