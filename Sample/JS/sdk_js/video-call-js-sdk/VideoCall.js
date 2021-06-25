@@ -222,30 +222,34 @@
             ).innerHTML = `Bạn có một cuộc gọi video từ ${data.publisher}, Bạn có muốn nhận cuộc gọi ngay lúc này?`;
 
             accept.onclick = function () {
-                if (video.status === CONNECTED) {
-                    video.acceptCall(uuidUser);
-                    receiving.remove();
-                } else {
-                    handleMsg(
-                        '',
-                        '',
-                        'Đang kết nối lại, vui lòng chờ trong giây lát',
-                        ''
-                    );
-                }
+                video.acceptCall(uuidUser);
+                receiving.remove();
+                // if (video.status === CONNECTED) {
+                //     video.acceptCall(uuidUser);
+                //     receiving.remove();
+                // } else {
+                //     handleMsg(
+                //         '',
+                //         '',
+                //         'Đang kết nối lại, vui lòng chờ trong giây lát',
+                //         ''
+                //     );
+                // }
             };
             rejectBtn.onclick = function () {
-                if (video.status === CONNECTED) {
-                    video.rejectCall(uuidUser);
-                    receiving.remove();
-                } else {
-                    handleMsg(
-                        '',
-                        '',
-                        'Đang kết nối lại, vui lòng chờ trong giây lát',
-                        ''
-                    );
-                }
+                video.rejectCall(uuidUser);
+                receiving.remove();
+                // if (video.status === CONNECTED) {
+                //     video.rejectCall(uuidUser);
+                //     receiving.remove();
+                // } else {
+                //     handleMsg(
+                //         '',
+                //         '',
+                //         'Đang kết nối lại, vui lòng chờ trong giây lát',
+                //         ''
+                //     );
+                // }
             };
             receiving.style.display = 'block';
         };
@@ -502,6 +506,7 @@
                     tokenIdAppDest: tokenIdAppDest,
                     tokenIdAppSrc: this.config.token_id_app,
                     additionalData: additionalData,
+                    version: '3.0.0',
                 };
                 const res = await new Fetch(
                     API_ROUTER + 'v3/create-call',
@@ -519,7 +524,7 @@
                     if (this.url) {
                         this.openWindowCall(callerId);
                     }
-                    this.setTimeoutEndcall(callerId);
+                    // this.setTimeoutEndcall(callerId);
                     return res;
                 }
                 return res;
@@ -767,7 +772,7 @@
                     });
                     this.startRingtone();
                     new Popup().initReceivingModal(uuidCustomer, message);
-                    this.setTimeoutEndcall(uuidCustomer);
+                    // this.setTimeoutEndcall(uuidCustomer);
                     return;
                 case REJECTED:
                     console.log('REJECTED');
