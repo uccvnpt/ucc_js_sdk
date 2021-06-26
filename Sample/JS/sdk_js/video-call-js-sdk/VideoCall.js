@@ -842,7 +842,7 @@
                         }
                         _this.status = CONNECTED;
                         stompClient.subscribe(
-                            '/topic/' + mysubid,
+                            '/queue/' + mysubid,
                             function (sdkEvent) {
                                 const mess = JSON.parse(
                                     JSON.stringify(sdkEvent.body)
