@@ -466,7 +466,8 @@
 
         VideoCall.prototype.registerDevice = async function (
             uuidCustomer,
-            personName
+            personName,
+            tokenIdApp
         ) {
             const body = {
                 deviceId: getUUID(),
@@ -477,7 +478,7 @@
                 personIdApp: uuidCustomer,
                 personName: personName,
                 topicUsing: this.getTopicUsing(uuidCustomer),
-                tokenIdApp: this.config.token_id_app,
+                tokenIdApp: tokenIdApp ? tokenIdApp : this.config.token_id_app,
             };
             return await new Fetch(
                 API_ROUTER + 'v3/register-device',
