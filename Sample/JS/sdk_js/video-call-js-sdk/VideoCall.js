@@ -731,16 +731,18 @@
                 if (!this.windowCall) {
                     throw '404-window';
                 }
-                this.windowCall.onpageshow = (event) => {
-                    this.pageShow = true;
+                // this.windowCall.onpageshow = (event) => {
+                //     this.pageShow = true;
+                // };
+                this.windowCall.onbeforeunload = (event) => {
+                    this.endCall(callerId);
                 };
-
-                this.windowCall.onpagehide = (event) => {
-                    if (this.pageShow) {
-                        this.endCall(callerId);
-                        this.pageShow = false;
-                    }
-                };
+                // this.windowCall.onpagehide = (event) => {
+                //     if (this.pageShow) {
+                //         // this.endCall(callerId);
+                //         this.pageShow = false;
+                //     }
+                // };
             } catch (e) {
                 if (e === '404-window') {
                     handleMsg(
