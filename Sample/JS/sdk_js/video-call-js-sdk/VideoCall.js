@@ -462,6 +462,7 @@
             this.status = 'DISCONNECTED';
             this.api = null;
             this.timeout = null;
+            this.timeoutRingtone = null;
         }
 
         VideoCall.prototype.registerDevice = async function (
@@ -999,7 +1000,11 @@
             audio = new Audio(src);
             audio.loop = true;
             audio.play();
-            setTimeout(() => {
+            if (this.timeoutRingtone) {
+                clearTimeout(this.timeoutRingtone);
+                this.timeoutRingtone = null;
+            }
+            this.timeoutRingtone = setTimeout(() => {
                 if (audio) {
                     audio.pause();
                 }
@@ -1012,6 +1017,8 @@
                 audio.currentTime = 0;
                 audio = null;
             }
+            clearTimeout(this.timeoutRingtone);
+            this.timeoutRingtone = null;
         };
 
         VideoCall.prototype.stopTimeout = function () {
