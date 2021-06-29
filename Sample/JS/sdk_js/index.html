@@ -134,7 +134,7 @@
                                     class="btn btn-success"
                                     onclick="setUUID('tokenIdAppDest')"
                                 >
-                                    Bước 4: Thiết lập token id app dest
+                                    Bước 4: Thiết lập token id app destination
                                 </button>
                             </div>
                         </div>
@@ -278,10 +278,17 @@
 
             function loginAs(role) {
                 alert('login as ' + role);
+
+                //token id app của hệ thống muốn đăng ký thiết bị
+                const token_id_app = localStorage
+                    .getItem('tokenIdAppDest')
+                    .replace(/"/g, '');
+
                 if (role === 'admin') {
                     video.registerDevice(
                         localStorage.getItem('uuidAdmin').replace(/"/g, ''),
-                        'Những Văn Hẳn'
+                        'Những Văn Hẳn',
+                        token_id_app
                     );
                 }
             }
