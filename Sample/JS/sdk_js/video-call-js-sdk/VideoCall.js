@@ -9,7 +9,8 @@
         video,
         returnImage;
     // const dev_url = 'https://api.idg.vnpt.vn/';
-    const dev_url = 'https://explorer.idg.vnpt.vn/';
+    const dev_url = 'http://10.59.91.131:8990/';
+    // const dev_url = 'https://explorer.idg.vnpt.vn/';
     const API_ROUTER = dev_url + 'router-service/api/';
     const UUID = 'uuid';
     const ROOM_INFO = 'roomInfo';
@@ -74,6 +75,7 @@
             }
         }
     });
+
     Popup = (function () {
         const initRating =
             `<div class="modalSDK" id="ratingModal" tabindex="-1" role="dialog">` +
@@ -437,7 +439,7 @@
                 grant_type: 'client_credentials',
             };
             const res = await this.postDataForAuthentication(
-                dev_url + 'auth-service/oauth/token',
+                'https://explorer.idg.vnpt.vn/' + 'auth-service/oauth/token',
                 param,
                 this.config
             );
@@ -776,7 +778,7 @@
                     });
                     this.startRingtone();
                     new Popup().initReceivingModal(uuidCustomer, message);
-                    // this.setTimeoutEndcall(uuidCustomer);
+                    this.setTimeoutEndcall(uuidCustomer);
                     return;
                 case REJECTED:
                     console.log('REJECTED');
@@ -831,7 +833,9 @@
                     'https://',
                     ''
                 )}router-service/websocket?access_token=${access_token}`;
-                let ws = new WebSocket(webSocketEndPoint);
+                let ws = new WebSocket(
+                    'ws://10.59.91.131:8990/router-service/websocket'
+                );
                 stompClient = StompJS.over(ws);
                 let mysubid = this.getTopicUsing(uuidCustomer);
                 if (!enableHeartbeat) {
@@ -840,12 +844,13 @@
                 stompClient.connect(
                     {},
                     function (frame) {
+                        console.log('wssssss', ws.sessionId);
                         if (successCallback) {
                             successCallback(frame.command);
                         }
                         _this.status = CONNECTED;
                         stompClient.subscribe(
-                            '/queue/' + mysubid,
+                            '/topic/' + mysubid,
                             function (sdkEvent) {
                                 const mess = JSON.parse(
                                     JSON.stringify(sdkEvent.body)
@@ -857,7 +862,6 @@
                                     messParse.title === lastMessSocket.title &&
                                     messParse.roomId === lastMessSocket.roomId
                                 ) {
-                                    // console.log('duplicate');
                                     return;
                                 } else {
                                     if (returnInSomething) {
@@ -869,6 +873,20 @@
                                     );
                                 }
                                 lastMessSocket = messParse;
+                                stompClient.send(
+                                    '/app/testmessage',
+                                    {
+                                        status: 'RECEIVED',
+                                        roomId: JSON.parse(mess).roomId,
+                                        title: JSON.parse(mess).title,
+                                        topicUsing: mysubid,
+                                    },
+                                    'client send'
+                                );
+                                // sdkEvent.ack({
+                                //     roomId: JSON.parse(mess).roomId,
+                                //     title: JSON.parse(mess).title,
+                                // });
                             },
                             { id: mysubid }
                         );
