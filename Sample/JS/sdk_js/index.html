@@ -188,9 +188,13 @@
                 ? localStorage.getItem('uuidUser').replace(/"/g, '')
                 : video.createUUID();
 
+            // khai báo token id app của hệ thống muốn gọi đến
+            // trong sample chỉ thực hiện set động để phục vụ việc test
+            // có thể set cứng tùy vào hệ thống muốn gọi vào
             const tokenIdAppDest = localStorage.getItem('tokenIdAppDest')
                 ? localStorage.getItem('tokenIdAppDest').replace(/"/g, '')
                 : '01ebcf7e-1a5c-1080-82a1-10a45c074591';
+
             // thực hiện connect tới socket
             video.initSocket(
                 Stomp,
@@ -254,13 +258,11 @@
                 const additionalData = {
                     caller: 'smcs',
                 };
-                // const tokenIdAppDest = '01ebcf76-3fe5-1138-a649-19f835791b8b';
-                // const tokenIdAppDest = '01ebcf7e-1a5c-1080-82a1-10a45c074591';
                 const res = await video.createCall(
                     uuidAdmin,
                     'Nguyễn Văn Lâm',
                     callerIdDest,
-                    localStorage.getItem('tokenIdAppDest').replace(/"/g, ''),
+                    localStorage.getItem('tokenIdAppDest').replace(/"/g, ''),  // thên 1 tham số token id app của hệ thống muốn gọi đến
                     additionalData
                 );
                 console.log('call', res);
