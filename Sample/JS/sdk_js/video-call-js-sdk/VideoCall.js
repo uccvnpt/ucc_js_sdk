@@ -836,6 +836,8 @@
                 let mysubid = this.getTopicUsing(uuidCustomer);
                 if (!enableHeartbeat) {
                     stompClient.heartbeat = { outgoing: 0, incoming: 0 };
+                } else {
+                    stompClient.heartbeat = { outgoing: 1000, incoming: 1000 };
                 }
                 stompClient.connect(
                     {},
