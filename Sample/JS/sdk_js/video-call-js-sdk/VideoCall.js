@@ -450,9 +450,7 @@
             stompClient,
             hideModal,
             hideNoti,
-            stopTimeout,
-            startRingtone,
-            stopRingtone;
+            stopTimeout;
         let timeout = null;
         let audio = null;
 
@@ -463,6 +461,7 @@
             this.url = url;
             this.status = 'DISCONNECTED';
             this.api = null;
+            this.timeoutRingtone = null;
         }
 
         VideoCall.prototype.registerDevice = async function (
@@ -503,6 +502,7 @@
                     idgTokenId: this.config.token_id,
                     reciverCallers: reciverCallers,
                     additionalData: additionalData,
+                    version: '2.0.10',
                 };
                 const res = await new Fetch(
                     API_ROUTER + 'v2/create-call',
@@ -516,6 +516,7 @@
                         domain: res.object.domain,
                         caller: callerName,
                         additionalData: additionalData,
+                        version: '2.0.10',
                     });
                     if (this.url) {
                         this.openWindowCall(callerId);
@@ -536,7 +537,7 @@
 
         VideoCall.prototype.acceptCall = async function (callerId) {
             try {
-                stopRingtone();
+                this.stopRingtone();
                 const roomInfo = JSON.parse(getItem(ROOM_INFO));
                 const paramv2 = {
                     callerId: callerId,
@@ -586,7 +587,7 @@
 
         VideoCall.prototype.rejectCall = async function (callerId) {
             stopTimeout();
-            stopRingtone();
+            this.stopRingtone();
             const roomInfo = JSON.parse(getItem(ROOM_INFO));
             const paramv2 = {
                 callerId: callerId,
@@ -759,7 +760,7 @@
                         token: message.token,
                         domain: message.domain,
                     });
-                    startRingtone();
+                    this.startRingtone();
                     new Popup().initReceivingModal(uuidCustomer, message);
                     // this.setTimeoutEndcall(uuidCustomer);
                     return;
@@ -778,7 +779,7 @@
                 case FINISHED:
                     console.log('FINISHED');
                     stopTimeout();
-                    stopRingtone();
+                    this.stopRingtone();
                     handleMsg('', '', 'Cuộc gọi đã kết thúc!', '');
                     this.windowCall && this.windowCall.close();
                     // this.removeIframe();
@@ -791,7 +792,7 @@
                 case TIMEOUT:
                     console.log('timeout');
                     this.windowCall && this.windowCall.close();
-                    stopRingtone();
+                    this.stopRingtone();
                     // this.removeIframe();
                     hideModal();
                     return;
@@ -824,6 +825,8 @@
                 let mysubid = this.getTopicUsing(uuidCustomer);
                 if (!enableHeartbeat) {
                     stompClient.heartbeat = { outgoing: 0, incoming: 0 };
+                } else {
+                    stompClient.heartbeat = { outgoing: 3000, incoming: 3000 };
                 }
                 stompClient.connect(
                     {},
@@ -833,7 +836,7 @@
                         }
                         _this.status = CONNECTED;
                         stompClient.subscribe(
-                            '/topic/' + mysubid,
+                            '/queue/' + mysubid,
                             function (sdkEvent) {
                                 const mess = JSON.parse(
                                     JSON.stringify(sdkEvent.body)
@@ -975,6 +978,32 @@
             iframe.contentWindow.postMessage(data, '*');
         };
 
+        VideoCall.prototype.startRingtone = function () {
+            let src = 'https://ucc.vnpt.vn/assets/js/old_telephone.wav';
+            audio = new Audio(src);
+            audio.loop = true;
+            audio.play();
+            if (this.timeoutRingtone) {
+                clearTimeout(this.timeoutRingtone);
+                this.timeoutRingtone = null;
+            }
+            this.timeoutRingtone = setTimeout(() => {
+                if (audio) {
+                    audio.pause();
+                }
+            }, 70000);
+        };
+
+        VideoCall.prototype.stopRingtone = function () {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                audio = null;
+            }
+            clearTimeout(this.timeoutRingtone);
+            this.timeoutRingtone = null;
+        };
+
         hideModal = function () {
             const callingModal = document.getElementById('myModal');
             const receivingModal = document.getElementById('receivingCalling');
@@ -990,26 +1019,6 @@
             const modalMSG = document.getElementById('msgModal');
             if (modalMSG) {
                 modalMSG.remove();
-            }
-        };
-
-        startRingtone = function () {
-            let src = 'https://ucc.vnpt.vn/assets/js/old_telephone.wav';
-            audio = new Audio(src);
-            audio.loop = true;
-            audio.play();
-            setTimeout(() => {
-                if (audio) {
-                    audio.pause();
-                }
-            }, 70000);
-        };
-
-        stopRingtone = function () {
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-                audio = null;
             }
         };
 
