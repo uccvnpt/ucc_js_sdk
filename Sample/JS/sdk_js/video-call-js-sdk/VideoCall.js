@@ -522,6 +522,7 @@
                         domain: res.object.domain,
                         caller: callerName,
                         additionalData: additionalData,
+                        version: '3.0.0',
                     });
                     if (this.url) {
                         this.openWindowCall(callerId);
@@ -837,7 +838,7 @@
                 if (!enableHeartbeat) {
                     stompClient.heartbeat = { outgoing: 0, incoming: 0 };
                 } else {
-                    stompClient.heartbeat = { outgoing: 1000, incoming: 1000 };
+                    stompClient.heartbeat = { outgoing: 3000, incoming: 3000 };
                 }
                 stompClient.connect(
                     {},
