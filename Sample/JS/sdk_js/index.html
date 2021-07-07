@@ -262,7 +262,7 @@
                     uuidAdmin,
                     'Nguyễn Văn Lâm',
                     callerIdDest,
-                    localStorage.getItem('tokenIdAppDest').replace(/"/g, ''),  // thên 1 tham số token id app của hệ thống muốn gọi đến
+                    localStorage.getItem('tokenIdAppDest').replace(/"/g, ''), // thên 1 tham số token id app của hệ thống muốn gọi đến
                     additionalData
                 );
                 console.log('call', res);
@@ -286,11 +286,14 @@
                     .getItem('tokenIdAppDest')
                     .replace(/"/g, '');
 
+                const configBank = 'BANK'; // nếu là không phải là khách hàng bank thì tham số này có thể để null
+
                 if (role === 'admin') {
                     video.registerDevice(
                         localStorage.getItem('uuidAdmin').replace(/"/g, ''),
                         'Những Văn Hẳn',
-                        token_id_app
+                        token_id_app,
+                        configBank
                     );
                 }
             }
