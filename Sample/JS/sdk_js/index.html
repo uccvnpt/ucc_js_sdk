@@ -286,7 +286,7 @@
                     .getItem('tokenIdAppDest')
                     .replace(/"/g, '');
 
-                const configBank = 'BANK'; // nếu là không phải là khách hàng bank thì tham số này có thể để null
+                const configBank = 'BANK'; // nếu không phải là khách hàng bank thì tham số này có thể không truyền
 
                 if (role === 'admin') {
                     video.registerDevice(
