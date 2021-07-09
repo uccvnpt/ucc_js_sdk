@@ -480,7 +480,7 @@
                 personIdApp: uuidCustomer,
                 personName: personName,
                 topicUsing: this.getTopicUsing(uuidCustomer),
-                tokenIdApp: tokenIdApp ? tokenIdApp : this.config.token_id_app,
+                tokenIdApp: this.config.token_id_app,
                 configBank: configBank,
             };
             return await new Fetch(

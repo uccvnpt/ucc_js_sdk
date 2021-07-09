@@ -281,18 +281,12 @@
             function loginAs(role) {
                 alert('login as ' + role);
 
-                //token id app của hệ thống muốn đăng ký thiết bị
-                const token_id_app = localStorage
-                    .getItem('tokenIdAppDest')
-                    .replace(/"/g, '');
-
                 const configBank = 'BANK'; // nếu không phải là khách hàng bank thì tham số này có thể không truyền
 
                 if (role === 'admin') {
                     video.registerDevice(
                         localStorage.getItem('uuidAdmin').replace(/"/g, ''),
                         'Những Văn Hẳn',
-                        '01ebe0ce-272b-1d18-a245-114a541b4dc9',
                         configBank
                     );
                 }
