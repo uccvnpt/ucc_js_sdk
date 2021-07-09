@@ -468,7 +468,6 @@
         VideoCall.prototype.registerDevice = async function (
             uuidCustomer,
             personName,
-            tokenIdApp,
             configBank
         ) {
             const body = {
