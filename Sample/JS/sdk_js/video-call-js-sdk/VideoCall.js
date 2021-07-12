@@ -8,8 +8,8 @@
         token,
         video,
         returnImage;
-    // const dev_url = 'https://api.idg.vnpt.vn/';
-    const dev_url = 'https://explorer.idg.vnpt.vn/';
+    const dev_url = 'https://api.idg.vnpt.vn/';
+    // const dev_url = 'https://explorer.idg.vnpt.vn/';
     const API_ROUTER = dev_url + 'router-service/api/';
     const UUID = 'uuid';
     const ROOM_INFO = 'roomInfo';
