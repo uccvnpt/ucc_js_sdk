@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ConfigVideoCall } from '../ConfigVideoCall';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import * as StompJS from 'stompjs';
-import * as VideoCallSDK from 'video-call-js-sdk';
+import * as VideoCallSDK from 'video-call-js-sdk-v3';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -17,7 +17,7 @@ export class MainComponent implements OnInit, OnDestroy {
     uuidAdmin: string;
     uuidUser: string;
     video;
-    urlComponentCall = null;
+    urlComponentCall = 'call';
 
     constructor(public sanitizer: DomSanitizer) {}
 
@@ -54,7 +54,7 @@ export class MainComponent implements OnInit, OnDestroy {
                     );
                 }
             },
-            false
+            true
         );
     }
 
@@ -74,11 +74,16 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     async callVideo() {
-        const receiverCallers = [this.uuidUser];
+        const callerIdDest = this.uuidUser;
+        const additionalData = {
+            caller: 'smcs',
+        };
         const res = await this.video.createCall(
             this.uuidAdmin,
             'admin',
-            receiverCallers
+            callerIdDest,
+            ConfigVideoCall.token_id_app,
+            additionalData
         );
         if (res.message === 'IDG-00000000' && !this.urlComponentCall) {
             this.video.initVideoCall(

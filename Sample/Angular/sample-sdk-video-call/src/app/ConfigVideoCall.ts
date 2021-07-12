@@ -1,5 +1,6 @@
 export const ConfigVideoCall = {
     token_id: 'be400bf3-9b91-311b-e053-5f4fc10a3519',
+    token_id_app: '01ebe0ce-272b-1d18-a245-114a541b4dc9',
     token_key:
         'MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMiy2tvBR5iGiR2smm+/2dCgpAdqk2RdYAggcxKJYsPLurqiQwSrAOaUVoPPU7WS+o8uP246sD9UE+8rlmmTrpsCAwEAAQ==',
     client_id: '2Q0z4vJXaVRBwPyTIy6IZ236eWSBsbDadOGcqrkm',

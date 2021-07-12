@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigVideoCall } from '../ConfigVideoCall';
-import * as VideoCallSDK from 'video-call-js-sdk';
+import * as VideoCallSDK from 'video-call-js-sdk-v3';
 
 declare var JitsiMeetExternalAPI: any;
 
@@ -16,7 +16,7 @@ export class VideoCallComponent implements OnInit {
 
     constructor() {}
     ngOnInit(): void {
-        this.video = VideoCallSDK.initConfig(null, ConfigVideoCall);
+        this.video = VideoCallSDK.initConfig('call', ConfigVideoCall);
         this.api = this.video.initVideoCall(
             JitsiMeetExternalAPI,
             localStorage.getItem('uuidAdmin').replace(/"/g, ''),
