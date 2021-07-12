@@ -17,7 +17,7 @@ export class MainComponent implements OnInit, OnDestroy {
     uuidAdmin: string;
     uuidUser: string;
     video;
-    urlComponentCall = null;
+    urlComponentCall = 'call';
 
     constructor(public sanitizer: DomSanitizer) {}
 
@@ -54,7 +54,7 @@ export class MainComponent implements OnInit, OnDestroy {
                     );
                 }
             },
-            false
+            true
         );
     }
 

@@ -16,7 +16,7 @@ export class VideoCallComponent implements OnInit {
 
     constructor() {}
     ngOnInit(): void {
-        this.video = VideoCallSDK.initConfig(null, ConfigVideoCall);
+        this.video = VideoCallSDK.initConfig('call', ConfigVideoCall);
         this.api = this.video.initVideoCall(
             JitsiMeetExternalAPI,
             localStorage.getItem('uuidAdmin').replace(/"/g, ''),
