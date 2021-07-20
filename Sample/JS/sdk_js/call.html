@@ -13,7 +13,7 @@
 
         <div id="meet" style="height: 100vh"></div>
         <script>
-            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            const video = VideoCallSDK.initConfig(null, ConfigVideoCall);
             video.initVideoCall(
                 window.JitsiMeetExternalAPI,
                 localStorage.getItem('uuidAdmin').replace(/"/g, ''),

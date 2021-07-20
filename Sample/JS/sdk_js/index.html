@@ -170,15 +170,19 @@
                         height="500"
                     >
                     </iframe>
+                    <div id="meet" style="height: 100vh"></div>
                 </ul>
             </div>
         </div>
 
-        <div id="meet"></div>
-
         <script>
+            var createCallUser = false;
             //init config cho sdk
-            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            const video = VideoCallSDK.initConfig(
+                null,
+                ConfigVideoCall,
+                window.JitsiMeetExternalAPI
+            );
 
             // Khai báo biến cần thiết
             const uuidAdmin = localStorage.getItem('uuidAdmin')
@@ -203,7 +207,11 @@
                     console.log(success);
                 },
                 (event) => {
-                    console.log(event);
+                    // alert(event.title);
+                    // if (event.title === 'ACCEPTED' && !createCallUser) {
+                    //     window.location.href =
+                    //         'file:///C:/Users/Hi/Desktop/JS_SDK/Sample/JS/sdk_js/call.html';
+                    // }
                 },
                 true
             );
@@ -265,6 +273,10 @@
                     localStorage.getItem('tokenIdAppDest').replace(/"/g, ''), // thên 1 tham số token id app của hệ thống muốn gọi đến
                     additionalData
                 );
+                createCallUser = true;
+
+                // window.location.href =
+                //     'file:///C:/Users/Hi/Desktop/JS_SDK/Sample/JS/sdk_js/call.html';
                 console.log('call', res);
             }
 
@@ -286,7 +298,7 @@
                 if (role === 'admin') {
                     video.registerDevice(
                         localStorage.getItem('uuidAdmin').replace(/"/g, ''),
-                        'Những Văn Hẳn',
+                        'Những Văn Hẳn'
                         // configBank
                     );
                 }
