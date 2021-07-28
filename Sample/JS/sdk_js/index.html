@@ -178,7 +178,7 @@
 
         <script>
             //init config cho sdk
-            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall, false);
 
             // Khai báo biến cần thiết
             const uuidAdmin = localStorage.getItem('uuidAdmin')
@@ -287,7 +287,7 @@
                     video.registerDevice(
                         localStorage.getItem('uuidAdmin').replace(/"/g, ''),
                         'Những Văn Hẳn',
-                        // configBank
+                        configBank
                     );
                 }
             }
