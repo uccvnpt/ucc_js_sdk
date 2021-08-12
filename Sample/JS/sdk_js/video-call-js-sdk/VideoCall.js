@@ -9,7 +9,7 @@
         video,
         returnImage;
     const dev_url = "https://api.idg.vnpt.vn/";
-    // const dev_url = 'https://explorer.idg.vnpt.vn/';
+    // const dev_url = "https://explorer.idg.vnpt.vn/";
     const API_ROUTER = dev_url + "router-service/api/";
     const UUID = "uuid";
     const ROOM_INFO = "roomInfo";
@@ -454,7 +454,7 @@
         let getUUID, setItem, getItem, stompClient, hideModal, hideNoti;
         let audio = null;
 
-        function VideoCall(url, config, enableModal) {
+        function VideoCall(url, config, enableModal, widthPopup, heightPopup) {
             this.config = config;
             this.windowCall = null;
             this.pageShow = false;
@@ -464,6 +464,8 @@
             this.timeout = null;
             this.timeoutRingtone = null;
             this.enableModal = enableModal;
+            this.widthPopup = widthPopup;
+            this.heightPopup = heightPopup;
         }
 
         VideoCall.prototype.registerDevice = async function (
@@ -495,11 +497,15 @@
             callerName,
             callerIdDest,
             tokenIdAppDest,
-            additionalData
+            additionalData,
+            urlUpdate
         ) {
             try {
                 if (this.status === DISCONNECTED) {
                     throw "Chưa kết nối socket, vui lòng thử lại sau!";
+                }
+                if (this.url) {
+                    this.url = urlUpdate;
                 }
                 const body = {
                     callerId: callerId,
@@ -543,9 +549,12 @@
             }
         };
 
-        VideoCall.prototype.acceptCall = async function (callerId) {
+        VideoCall.prototype.acceptCall = async function (callerId, urlUpdate) {
             try {
                 this.stopRingtone();
+                if (urlUpdate) {
+                    this.url = urlUpdate;
+                }
                 const roomInfo = JSON.parse(getItem(ROOM_INFO));
                 const param = {
                     callerId: callerId,
@@ -590,6 +599,57 @@
                     param,
                     this.config
                 ).post();
+            }
+            return res;
+        };
+
+        VideoCall.prototype.getRoomLog = async function () {
+            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            let res;
+            if (roomInfo) {
+                res = await new Fetch(
+                    API_ROUTER +
+                        "v2/external/room-log/" +
+                        this.config.token_id +
+                        "/" +
+                        roomInfo.roomId,
+                    "",
+                    this.config
+                ).get();
+            }
+            return res;
+        };
+
+        VideoCall.prototype.getLogCaller = async function (
+            callerId,
+            startDate,
+            endDate,
+            statusCaller,
+            page,
+            maxSize,
+            propertiesSort,
+            sort
+        ) {
+            const roomInfo = JSON.parse(getItem(ROOM_INFO));
+            let res;
+            if (roomInfo) {
+                let pageSize = maxSize ? maxSize : 10;
+                let url = `callerId=${callerId}&endDate=${endDate}&maxSize=${pageSize}&page=${
+                    page ? page : 0
+                }&propertiesSort=${
+                    propertiesSort ? propertiesSort : null
+                }&sort=${
+                    sort ? sort : null
+                }&startDate=${startDate}&statusCaller=${statusCaller}&idgTokenId=${
+                    this.config.token_id
+                }`;
+                res = await new Fetch(
+                    API_ROUTER +
+                        `v2/external/log-caller/all-trace-tokenid-callerid?` +
+                        url,
+                    "",
+                    this.config
+                ).get();
             }
             return res;
         };
@@ -726,7 +786,8 @@
                 this.windowCall = window.open(
                     this.url,
                     "videocall",
-                    `width=1280,height=600,top=${top},left=${left},menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yesnp`
+                    `width=${this.widthPopup},height=${this.heightPopup},top=${top},left=${left},menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yesnp`
+                    // `width=1280,height=600,top=${top},left=${left},menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yesnp`
                 );
                 window.addEventListener("offline", function () {
                     _this.windowCall.close();
@@ -803,7 +864,7 @@
                     if (this.enableModal) {
                         handleMsg("", "", "Cuộc gọi đã kết thúc!", "");
                     }
-                    this.windowCall && this.windowCall.close();
+                    // this.windowCall && this.windowCall.close();
                     if (audio) {
                         audio.pause();
                         audio.currentTime = 0;
@@ -959,7 +1020,7 @@
                 );
                 this.api.addEventListener("readyToClose", async () => {
                     await this.endCall(uuidCustomer);
-                    window.open("", "_self").close();
+                    // window.open("", "_self").close();
                 });
                 return this.api;
             } catch (e) {
@@ -1102,8 +1163,20 @@
     };
 
     VideoCallSDK = {
-        initConfig: function (url, config, enableModal) {
-            video = new VideoCall(url, config, enableModal);
+        initConfig: function (
+            url,
+            config,
+            enableModal,
+            widthPopup,
+            heightPopup
+        ) {
+            video = new VideoCall(
+                url,
+                config,
+                enableModal,
+                widthPopup,
+                heightPopup
+            );
             return video;
         },
     };
