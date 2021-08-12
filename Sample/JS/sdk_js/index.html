@@ -178,22 +178,22 @@
 
         <script>
             //init config cho sdk
-            const video = VideoCallSDK.initConfig('call.html', ConfigVideoCall);
+            const video = VideoCallSDK.initConfig("call.html", ConfigVideoCall);
 
             // Khai báo biến cần thiết
-            const uuidAdmin = localStorage.getItem('uuidAdmin')
-                ? localStorage.getItem('uuidAdmin').replace(/"/g, '')
+            const uuidAdmin = localStorage.getItem("uuidAdmin")
+                ? localStorage.getItem("uuidAdmin").replace(/"/g, "")
                 : video.createUUID();
-            const uuidUser = localStorage.getItem('uuidUser')
-                ? localStorage.getItem('uuidUser').replace(/"/g, '')
+            const uuidUser = localStorage.getItem("uuidUser")
+                ? localStorage.getItem("uuidUser").replace(/"/g, "")
                 : video.createUUID();
 
             // khai báo token id app của hệ thống muốn gọi đến
             // trong sample chỉ thực hiện set động để phục vụ việc test
             // có thể set cứng tùy vào hệ thống muốn gọi vào
-            const tokenIdAppDest = localStorage.getItem('tokenIdAppDest')
-                ? localStorage.getItem('tokenIdAppDest').replace(/"/g, '')
-                : '01ebcf7e-1a5c-1080-82a1-10a45c074591';
+            const tokenIdAppDest = localStorage.getItem("tokenIdAppDest")
+                ? localStorage.getItem("tokenIdAppDest").replace(/"/g, "")
+                : "01ebcf7e-1a5c-1080-82a1-10a45c074591";
 
             // thực hiện connect tới socket
             video.initSocket(
@@ -204,14 +204,29 @@
                 },
                 (event) => {
                     console.log(event);
+                    if (event.title === "FINISHED") {
+                        getLog();
+                    }
                 },
                 true
             );
 
-            document.getElementById('uuidAdmin').value = uuidAdmin;
-            document.getElementById('uuidUser').value = uuidUser;
-            document.getElementById('uuidUserText').innerHTML = uuidUser;
-            document.getElementById('tokenIdAppDest').value = tokenIdAppDest;
+            async function getLog() {
+                const roomlog = await video.getRoomLog();
+                const roomlogcaller = await video.getLogCaller(
+                    uuidAdmin,
+                    "2021-07-07%2023:59:59",
+                    "2021-07-09%2023:59:59",
+                    ["PENDING", "FINISHED"]
+                );
+                console.log(roomlog);
+                console.log(roomlogcaller);
+            }
+
+            document.getElementById("uuidAdmin").value = uuidAdmin;
+            document.getElementById("uuidUser").value = uuidUser;
+            document.getElementById("uuidUserText").innerHTML = uuidUser;
+            document.getElementById("tokenIdAppDest").value = tokenIdAppDest;
 
             //hàm thực hiện xóa device khi logout
             function logout() {
@@ -224,27 +239,27 @@
 
             function setUUID(type) {
                 const uuidAdminValue =
-                    document.getElementById('uuidAdmin').value;
-                const uuidUserValue = document.getElementById('uuidUser').value;
+                    document.getElementById("uuidAdmin").value;
+                const uuidUserValue = document.getElementById("uuidUser").value;
                 const tokenIdAppDest =
-                    document.getElementById('tokenIdAppDest').value;
-                document.getElementById('uuidUserText').innerHTML =
+                    document.getElementById("tokenIdAppDest").value;
+                document.getElementById("uuidUserText").innerHTML =
                     uuidUserValue;
                 alert(type);
-                if (type === 'tokenIdAppDest') {
+                if (type === "tokenIdAppDest") {
                     localStorage.setItem(
-                        'tokenIdAppDest',
+                        "tokenIdAppDest",
                         JSON.stringify(tokenIdAppDest)
                     );
                 }
-                if (type === 'admin') {
+                if (type === "admin") {
                     localStorage.setItem(
-                        'uuidAdmin',
+                        "uuidAdmin",
                         JSON.stringify(uuidAdminValue)
                     );
                 } else {
                     localStorage.setItem(
-                        'uuidUser',
+                        "uuidUser",
                         JSON.stringify(uuidUserValue)
                     );
                 }
@@ -253,40 +268,40 @@
             //gọi video
             async function callVideo() {
                 const callerIdDest = localStorage
-                    .getItem('uuidUser')
-                    .replace(/"/g, '');
+                    .getItem("uuidUser")
+                    .replace(/"/g, "");
                 const additionalData = {
-                    caller: 'smcs',
+                    caller: "smcs",
                 };
                 const res = await video.createCall(
                     uuidAdmin,
-                    'Nguyễn Văn Lâm',
+                    "Nguyễn Văn Lâm",
                     callerIdDest,
-                    localStorage.getItem('tokenIdAppDest').replace(/"/g, ''), // thên 1 tham số token id app của hệ thống muốn gọi đến
+                    localStorage.getItem("tokenIdAppDest").replace(/"/g, ""), // thên 1 tham số token id app của hệ thống muốn gọi đến
                     additionalData
                 );
-                console.log('call', res);
+                console.log("call", res);
             }
 
             //get url file record
             async function getFile() {
-                const url = document.getElementById('urlVideo');
+                const url = document.getElementById("urlVideo");
                 const res = await video.getFile(null);
                 if (res && res.object) {
                     url.src = res.object.url;
                 }
-                console.log('getFile', res);
+                console.log("getFile", res);
             }
 
             function loginAs(role) {
-                alert('login as ' + role);
+                alert("login as " + role);
 
-                const configBank = 'BANK'; // nếu không phải là khách hàng bank thì tham số này có thể không truyền
+                const configBank = "BANK"; // nếu không phải là khách hàng bank thì tham số này có thể không truyền
 
-                if (role === 'admin') {
+                if (role === "admin") {
                     video.registerDevice(
-                        localStorage.getItem('uuidAdmin').replace(/"/g, ''),
-                        'Những Văn Hẳn',
+                        localStorage.getItem("uuidAdmin").replace(/"/g, ""),
+                        "Những Văn Hẳn"
                         // configBank
                     );
                 }
